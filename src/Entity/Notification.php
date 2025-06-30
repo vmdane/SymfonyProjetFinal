@@ -27,13 +27,13 @@ class Notification
     private ?string $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
-    private ?Utilisateur $utilisateur = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
-    private ?Livre $livre = null;
+    private ?Book $book = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
-    private ?Categorie $categorie = null;
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
@@ -88,38 +88,38 @@ class Notification
         return $this;
     }
 
-    public function getUtilisateur(): ?Utilisateur
+    public function getUser(): ?User
     {
-        return $this->utilisateur;
+        return $this->user;
     }
 
-    public function setUtilisateur(?Utilisateur $utilisateur): static
+    public function setUser(?User $user): static
     {
-        $this->utilisateur = $utilisateur;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getLivre(): ?Livre
+    public function getBook(): ?Book
     {
-        return $this->livre;
+        return $this->book;
     }
 
-    public function setLivre(?Livre $livre): static
+    public function setBook(?Book $book): static
     {
-        $this->livre = $livre;
+        $this->book = $book;
 
         return $this;
     }
 
-    public function getCategorie(): ?Categorie
+    public function getCategory(): ?Category
     {
-        return $this->categorie;
+        return $this->category;
     }
 
-    public function setCategorie(?Categorie $categorie): static
+    public function setCategory(?Category $category): static
     {
-        $this->categorie = $categorie;
+        $this->category = $category;
 
         return $this;
     }

@@ -48,6 +48,9 @@
             color: white;
             outline: none;
         }
+        h1 {
+    @apply text-white;
+  }
 
         main {
             flex-grow: 1;
@@ -86,8 +89,8 @@
         <nav>
             <ul>
                 <li><a href="{{ path('app_home') }}">Accueil</a></li>
-                <li><a href="{{ path('app_livre_index') }}">Livres</a></li>
-                <li><a href="{{ path('app_auteur_index') }}">Auteurs</a></li>
+                <li><a href="{{ path('app_book_index') }}">Books</a></li>
+                <li><a href="{{ path('app_author_index') }}">Authors</a></li>
                 {% if app.user %}
                     <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
                 {% else %}

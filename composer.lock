@@ -131,8 +131,8 @@
                     "email": "guilhermeblanco@gmail.com"
                 },
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
+                    "name": "Novel Borschel",
+                    "email": "novel@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
@@ -222,8 +222,8 @@
                     "email": "guilhermeblanco@gmail.com"
                 },
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
+                    "name": "Novel Borschel",
+                    "email": "novel@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
@@ -323,8 +323,8 @@
                     "email": "guilhermeblanco@gmail.com"
                 },
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
+                    "name": "Novel Borschel",
+                    "email": "novel@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
@@ -674,8 +674,8 @@
                     "email": "guilhermeblanco@gmail.com"
                 },
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
+                    "name": "Novel Borschel",
+                    "email": "novel@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
@@ -764,8 +764,8 @@
                     "email": "guilhermeblanco@gmail.com"
                 },
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
+                    "name": "Novel Borschel",
+                    "email": "novel@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
@@ -924,8 +924,8 @@
                     "email": "guilhermeblanco@gmail.com"
                 },
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
+                    "name": "Novel Borschel",
+                    "email": "novel@code-factory.org"
                 },
                 {
                     "name": "Johannes Schmitt",
@@ -1126,8 +1126,8 @@
                     "email": "guilhermeblanco@gmail.com"
                 },
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
+                    "name": "Novel Borschel",
+                    "email": "novel@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
@@ -1200,8 +1200,8 @@
                     "email": "guilhermeblanco@gmail.com"
                 },
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
+                    "name": "Novel Borschel",
+                    "email": "novel@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
@@ -1347,7 +1347,7 @@
             ],
             "authors": [
                 {
-                    "name": "Eduardo Gulias Davis"
+                    "name": "Eduardo Gulias Dnotice"
                 }
             ],
             "description": "A library for validating emails against several RFCs",
