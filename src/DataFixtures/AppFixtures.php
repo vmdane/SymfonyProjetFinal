@@ -17,7 +17,7 @@ class AppFixtures extends Fixture
 
         foreach (['Novel', 'BD', 'Essay', 'Histoire', 'Science'] as $name) {
             $category = new Category();
-            $category->setNom($name);
+            $category->setname($name);
             $category->setDescription($faker->sentence()); // ← c’est ce champ qui est obligatoire
             $manager->persist($category);
             $categorys[] = $category;

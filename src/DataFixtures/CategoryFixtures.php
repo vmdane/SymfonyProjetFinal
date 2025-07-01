@@ -11,10 +11,10 @@ class CategoryFixtures extends Fixture
     {
         $faker = \Faker\Factory::create('fr_FR');
         $categorys = [];
-        $names = ['Novel', 'BD', 'Essay'];  
+        $names = ['Novel', 'BD', 'Essay'];
         foreach ($names as $name) {
             $cat = new Category();
-            $cat->setNom($name);
+            $cat->setName($name);
             $cat->setDescription($faker->sentence());
             $manager->persist($cat);
             $categorys[] = $cat;

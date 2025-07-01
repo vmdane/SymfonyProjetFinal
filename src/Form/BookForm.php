@@ -26,7 +26,7 @@ class BookForm extends AbstractType
             ->add('authors', EntityType::class, [
                 'class'        => Author::class,
                 'choice_label' => function(Author $author) {
-                    return $author->getPrenom() . ' ' . strtoupper($author->getNom());
+                    return $author->getFirstname() . ' ' . strtoupper($author->getName());
                 },
                 'multiple'     => true,
                 'expanded'     => true,    // cases à cocher
@@ -34,7 +34,7 @@ class BookForm extends AbstractType
             ])
             ->add('categorys', EntityType::class, [
                 'class'        => Category::class,
-                'choice_label' => 'nom',   // affiche le nom de la catégorie
+                'choice_label' => 'name',   // affiche le name de la catégorie
                 'multiple'     => true,
                 'expanded'     => true,    // cases à cocher
                 'required'     => false,

@@ -20,8 +20,8 @@ class UserFixtures extends Fixture
     {
         $user = new User();
         $user->setEmail('test@example.com');
-        $user->setNom('Dupont');
-        $user->setPrenom('Jean');
+        $user->setName('Dupont');
+        $user->setFirstname('Jean');
         $user->setIsVerified(true);
         $user->setRoles(['ROLE_USER']);
         $user->setCreateAt(new \DateTime());

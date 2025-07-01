@@ -101,23 +101,23 @@
                     <h5 class="card-title">{{ book.titre }}</h5>
                     <p class="card-text mb-1"><strong>Date publication:</strong> {{ book.datePublication ? book.datePublication|date('d/m/Y') : 'N/A' }}</p>
                     <p class="card-text mb-1"><strong>ISBN:</strong> {{ book.isbn }}</p>
-                    <p class="card-text mb-1"><strong>Disponible:</strong> 
+                    <p class="card-text mb-1"><strong>Disponible:</strong>
                         {% if book.disponible %}
                             <span class="badge bg-success">Oui</span>
                         {% else %}
                             <span class="badge bg-danger">Non</span>
                         {% endif %}
                     </p>
-                    <p class="card-text mb-2"><strong>Authors:</strong> 
+                    <p class="card-text mb-2"><strong>Authors:</strong>
                         {% for author in book.authors %}
-                            {{ author.nom }}{% if not loop.last %}, {% endif %}
+                            {{ author.name }}{% if not loop.last %}, {% endif %}
                         {% else %}
                             Aucun
                         {% endfor %}
                     </p>
-                    <p class="card-text mb-3"><strong>Catégories:</strong> 
+                    <p class="card-text mb-3"><strong>Catégories:</strong>
                         {% for cat in book.categorys %}
-                            {{ cat.nom }}{% if not loop.last %}, {% endif %}
+                            {{ cat.name }}{% if not loop.last %}, {% endif %}
                         {% else %}
                             Aucune
                         {% endfor %}

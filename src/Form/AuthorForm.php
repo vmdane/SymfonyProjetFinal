@@ -16,8 +16,8 @@ class AuthorForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
-            ->add('prenom')
+            ->add('name')
+            ->add('firstname')
             ->add('dateNaissance', DateType::class, [
                 'widget' => 'single_text',
             ])

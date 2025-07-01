@@ -27,9 +27,9 @@
             Publié le : {{ book.datePublication ? book.datePublication|date('d/m/Y') : 'Date inconnue' }}
           </p>
           <p class="text-sm text-gray-700 flex-grow">
-            <strong>Author{{ book.authors|length > 1 ? 's' : '' }} :</strong> 
+            <strong>Author{{ book.authors|length > 1 ? 's' : '' }} :</strong>
             {% if book.authors|length > 0 %}
-              {{ book.authors|map(a => a.nom)|join(', ') }}
+              {{ book.authors|map(a => a.name)|join(', ') }}
             {% else %}
               <em>Non renseigné</em>
             {% endif %}
@@ -40,7 +40,7 @@
               {{ book.disponible ? 'Disponible' : 'Indisponible' }}
             </span>
           </p>
-          <a href="{{ path('app_book_show', {'id': book.id}) }}" 
+          <a href="{{ path('app_book_show', {'id': book.id}) }}"
              class="mt-6 inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-center rounded-md py-2 transition-colors">
             Voir plus
           </a>

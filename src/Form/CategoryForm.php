@@ -14,7 +14,7 @@ class CategoryForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
+            ->add('name')
             ->add('description')
             ->add('books', EntityType::class, [
                 'class' => Book::class,

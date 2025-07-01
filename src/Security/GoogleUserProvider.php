@@ -26,7 +26,7 @@ class GoogleUserProvider implements OAuthUserProviderInterface
         if (!$user) {
             $user = new User();
             $user->setEmail($email);
-            $user->setFirstname($resourceOwner->getFirstName());
+            $user->setFirstname($resourceOwner->getFirstname());
             $user->setLastname($resourceOwner->getLastName());
 
         }
