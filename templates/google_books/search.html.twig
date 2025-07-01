@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GoogleBooksController!{% endblock %}
+
+{% block body %}
+
+
+    <h1>Résultats pour "{{ query }}"</h1>
+
+    <form method="get" action="{{ path('google_books_search') }}">
+        <input type="text" name="q" value="{{ query }}">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <ul>
+        {% for book in books %}
+            <li style="margin-bottom: 2em;">
+                <strong>{{ attribute(book.volumeInfo, 'title')|default('Titre inconnu') }}</strong><br>
+
+                {% set authors = attribute(book.volumeInfo, 'authors')|default([]) %}
+                <em>{{ authors|join(', ') ?: 'Auteur inconnu' }}</em><br>
+
+                {% set imageLinks = attribute(book.volumeInfo, 'imageLinks')|default(null) %}
+                {% if imageLinks and imageLinks.thumbnail is defined %}
+                    <img src="{{ imageLinks.thumbnail }}" alt="Couverture de {{ book.volumeInfo.title }}" style="max-width: 120px; margin-top: 0.5em;"><br>
+                {% endif %}
+
+                <p>{{ attribute(book.volumeInfo, 'description')|default('Pas de description disponible.')|raw }}</p>
+            </li>
+        {% else %}
+            <li>Aucun livre trouvé.</li>
+        {% endfor %}
+    </ul>
+
+
+
+{% endblock %}
