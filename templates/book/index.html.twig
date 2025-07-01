@@ -1,0 +1,140 @@
+{% block body %}
+<style>
+        /* Reset basique */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #2c3e50;
+            padding: 15px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover,
+        nav ul li a:focus {
+            background-color: #3498db;
+            color: white;
+            outline: none;
+        }
+
+        main {
+            flex-grow: 1;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px 10px;
+            background-color: #2c3e50;
+            color: #bdc3c7;
+            font-size: 0.9em;
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            main {
+                margin: 20px 10px;
+            }
+        }
+    </style>
+<header>
+        <nav>
+            <ul>
+                <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                <li><a href="{{ path('app_book_index') }}">Books</a></li>
+                <li><a href="{{ path('app_author_index') }}">Authors</a></li>
+                {% if app.user %}
+                    <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+                {% else %}
+                    <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+<h1 class="mb-4">Liste des Books</h1>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for book in books %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ asset('images/image1.png') }}" class="card-img-top" alt="Couverture du book {{ book.titre }}" style="height: 250px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ book.titre }}</h5>
+                    <p class="card-text mb-1"><strong>Date publication:</strong> {{ book.datePublication ? book.datePublication|date('d/m/Y') : 'N/A' }}</p>
+                    <p class="card-text mb-1"><strong>ISBN:</strong> {{ book.isbn }}</p>
+                    <p class="card-text mb-1"><strong>Disponible:</strong> 
+                        {% if book.disponible %}
+                            <span class="badge bg-success">Oui</span>
+                        {% else %}
+                            <span class="badge bg-danger">Non</span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text mb-2"><strong>Authors:</strong> 
+                        {% for author in book.authors %}
+                            {{ author.nom }}{% if not loop.last %}, {% endif %}
+                        {% else %}
+                            Aucun
+                        {% endfor %}
+                    </p>
+                    <p class="card-text mb-3"><strong>Catégories:</strong> 
+                        {% for cat in book.categorys %}
+                            {{ cat.nom }}{% if not loop.last %}, {% endif %}
+                        {% else %}
+                            Aucune
+                        {% endfor %}
+                    </p>
+                    <div class="mt-auto">
+                        <a href="{{ path('app_book_show', {'id': book.id}) }}" class="btn btn-primary btn-sm me-2">Voir</a>
+                        <a href="{{ path('app_book_edit', {'id': book.id}) }}" class="btn btn-secondary btn-sm">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>Aucun book trouvé.</p>
+    {% endfor %}
+</div>
+
+<div class="mt-4">
+    <a href="{{ path('app_book_new') }}" class="btn btn-success">Créer un nouveau book</a>
+</div>
+{% endblock %}

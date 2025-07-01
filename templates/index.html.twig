@@ -3,5 +3,52 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur la page d'accueil</h1>
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-50 flex flex-col items-center py-12 px-6">
+  <header class="max-w-5xl w-full text-center mx-auto mb-16">
+    <h1 class="text-5xl font-extrabold text-white mb-4">Bienvenue sur la Bibliothèque</h1>
+    <p class="text-lg text-white max-w-xl mx-auto">
+      Découvrez notre collection unique de books, explorez les nouveautés et plongez dans des univers passionnants.
+    </p>
+  </header>
+
+  <main class="max-w-6xl w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    {% for book in books %}
+      <article class="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+        <div class="h-48 overflow-hidden rounded-t-lg">
+          {% if book.imageCouverture %}
+            <img src="{{ asset('images/' ~ book.imageCouverture) }}" alt="Couverture du book {{ book.titre }}" class="object-cover w-full h-full">
+          {% else %}
+            <img src="{{ asset('images/default.jpg') }}" alt="Image par défaut" class="object-cover w-full h-full">
+          {% endif %}
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h2 class="text-xl font-semibold text-indigo-800 mb-2 truncate" title="{{ book.titre }}">{{ book.titre }}</h2>
+          <p class="text-sm text-gray-600 mb-3">
+            Publié le : {{ book.datePublication ? book.datePublication|date('d/m/Y') : 'Date inconnue' }}
+          </p>
+          <p class="text-sm text-gray-700 flex-grow">
+            <strong>Author{{ book.authors|length > 1 ? 's' : '' }} :</strong> 
+            {% if book.authors|length > 0 %}
+              {{ book.authors|map(a => a.nom)|join(', ') }}
+            {% else %}
+              <em>Non renseigné</em>
+            {% endif %}
+          </p>
+          <p class="mt-4">
+            <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full
+              {{ book.disponible ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+              {{ book.disponible ? 'Disponible' : 'Indisponible' }}
+            </span>
+          </p>
+          <a href="{{ path('app_book_show', {'id': book.id}) }}" 
+             class="mt-6 inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-center rounded-md py-2 transition-colors">
+            Voir plus
+          </a>
+        </div>
+      </article>
+    {% else %}
+      <p class="col-span-full text-center text-gray-500 text-lg">Aucun book disponible pour le moment.</p>
+    {% endfor %}
+  </main>
+</div>
 {% endblock %}

@@ -1,0 +1,49 @@
+{# Ce template étend le fichier de base 'base.html.twig' #}
+{% extends 'base.html.twig' %}
+
+{# Bloc qui définit le titre de la page #}
+{% block title %}Author index{% endblock %}
+
+{# Bloc principal du contenu de la page #}
+{% block body %}
+    <h1>Author index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>DateNaissance</th>
+                <th>Biographie</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {# On boucle sur la collection 'authors' passée depuis le contrôleur #}
+        {% for author in authors %}
+            <tr>
+                <td>{{ author.id }}</td>
+                <td>{{ author.nom }}</td>
+                <td>{{ author.prenom }}</td>
+                {# Formatage de la date de naissance si elle existe #}
+                <td>{{ author.dateNaissance ? author.dateNaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ author.biographie }}</td>
+                <td>
+                    {# Liens pour voir ou éditer l'author #}
+                    <a href="{{ path('app_author_show', {'id': author.id}) }}">show</a>
+                    <a href="{{ path('app_author_edit', {'id': author.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            {# Si aucun author n'est trouvé #}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {# Lien pour créer un nouvel author #}
+    <a href="{{ path('app_author_new') }}">Create new</a>
+{% endblock %}
