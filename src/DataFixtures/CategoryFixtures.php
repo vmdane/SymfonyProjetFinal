@@ -10,14 +10,14 @@ class CategoryFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = \Faker\Factory::create('fr_FR');
-        $categorys = [];
+        $categories = [];
         $names = ['Novel', 'BD', 'Essay'];
         foreach ($names as $name) {
             $cat = new Category();
             $cat->setName($name);
             $cat->setDescription($faker->sentence());
             $manager->persist($cat);
-            $categorys[] = $cat;
+            $categories[] = $cat;
         }
         $manager->flush();
     }

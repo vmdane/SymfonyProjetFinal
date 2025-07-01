@@ -16,7 +16,7 @@ class BookFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         $authors   = $manager->getRepository(Author::class)->findAll();
-        $categorys = $manager->getRepository(Category::class)->findAll();
+        $categories = $manager->getRepository(Category::class)->findAll();
 
         // Récupérer tous les fichiers images dans public/images
         $imageFiles = array_filter(scandir('public/images'), function($file) {
@@ -44,8 +44,8 @@ class BookFixtures extends Fixture
                 }
             }
 
-            if (count($categorys) > 0) {
-                foreach ($faker->randomElements($categorys, rand(1, min(2, count($categorys)))) as $c) {
+            if (count($categories) > 0) {
+                foreach ($faker->randomElements($categories, rand(1, min(2, count($categories)))) as $c) {
                     $book->addCategory($c);
                 }
             }

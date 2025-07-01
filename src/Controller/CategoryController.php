@@ -18,7 +18,7 @@ final class CategoryController extends AbstractController
     public function index(CategoryRepository $categoryRepository): Response
     {
         return $this->render('category/index.html.twig', [
-            'categorys' => $categoryRepository->findAll(),
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
 

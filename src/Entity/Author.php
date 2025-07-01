@@ -40,6 +40,9 @@ class Author
     #[ORM\OneToMany(targetEntity: Notice::class, mappedBy: 'author')]
     private Collection $notice;
 
+    #[ORM\Column(length: 255)]
+    private ?string $fullName = null;
+
     public function __construct()
     {
         $this->books = new ArrayCollection();
@@ -152,6 +155,18 @@ class Author
                 $avi->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->fullName;
+    }
+
+    public function setFullName(string $fullName): static
+    {
+        $this->fullName = $fullName;
 
         return $this;
     }

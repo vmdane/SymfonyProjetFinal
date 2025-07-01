@@ -50,7 +50,7 @@ class Book
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'books')]
-    private Collection $categorys;
+    private Collection $categories;
 
     /**
      * @var Collection<int, Loan>
@@ -70,10 +70,16 @@ class Book
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'book')]
     private Collection $notifications;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $googleBookId = null;
+
     public function __construct()
     {
         $this->authors = new ArrayCollection();
-        $this->categorys = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->loans = new ArrayCollection();
         $this->notice = new ArrayCollection();
         $this->notifications = new ArrayCollection();
@@ -171,15 +177,15 @@ class Book
     /**
      * @return Collection<int, Category>
      */
-    public function getCategorys(): Collection
+    public function getcategories(): Collection
     {
-        return $this->categorys;
+        return $this->categories;
     }
 
     public function addCategory(Category $category): static
     {
-        if (!$this->categorys->contains($category)) {
-            $this->categorys->add($category);
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
         }
 
         return $this;
@@ -187,7 +193,7 @@ class Book
 
     public function removeCategory(Category $category): static
     {
-        $this->categorys->removeElement($category);
+        $this->categories->removeElement($category);
 
         return $this;
     }
@@ -278,6 +284,30 @@ class Book
                 $notification->setBook(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getGoogleBookId(): ?string
+    {
+        return $this->googleBookId;
+    }
+
+    public function setGoogleBookId(?string $googleBookId): static
+    {
+        $this->googleBookId = $googleBookId;
 
         return $this;
     }

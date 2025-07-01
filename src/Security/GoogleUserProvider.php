@@ -2,54 +2,59 @@
 
 namespace App\Security;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
-use KnpU\OAuth2ClientBundle\Security\User\OAuthUserProviderInterface;
 use League\OAuth2\Client\Provider\GoogleUser;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class GoogleUserProvider implements OAuthUserProviderInterface
+class GoogleUserProvider
 {
-    public function __construct(private UserRepository $userRepository)
-    {
-    }
+    public function __construct(
+        private EntityManagerInterface $em,
+        private UserPasswordHasherInterface $passwordHasher
+    ) {}
 
-    public function loadUserByOAuthUserResponse(\League\OAuth2\Client\Provider\ResourceOwnerInterface $resourceOwner): UserInterface
+    public function loadUserByGoogleUser(GoogleUser $googleUser): User
     {
-        /** @var GoogleUser $resourceOwner */
-        $email = $resourceOwner->getEmail();
+        $googleId = $googleUser->getId();
+        $email = $googleUser->getEmail();
 
-        $user = $this->userRepository->findOneBy(['email' => $email]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['googleId' => $googleId]);
 
         if (!$user) {
-            $user = new User();
-            $user->setEmail($email);
-            $user->setFirstname($resourceOwner->getFirstname());
-            $user->setLastname($resourceOwner->getLastName());
+            // Recherche par email pour lier un compte existant
+            $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
 
+            if ($user) {
+                $user->setGoogleId($googleId);
+            } else {
+                $user = new User();
+                $user->setGoogleId($googleId);
+                $user->setEmail($email);
+                $user->setRoles(['ROLE_USER']);
+
+                // Générer un mot de passe aléatoire encodé, car il est obligatoire (même si non utilisé)
+                $randomPassword = bin2hex(random_bytes(10));
+                $encodedPassword = $this->passwordHasher->hashPassword($user, $randomPassword);
+                $user->setPassword($encodedPassword);
+
+                // Init autres champs si tu veux éviter erreurs (optionnel)
+                $user->setCreateAt(new \DateTime());
+                $user->setIsVerified(true);
+
+                // Optionnel : récupérer nom et prénom depuis Google si dispo
+                if ($googleUser->getName()) {
+                    $user->setName($googleUser->getName());
+                }
+                if ($googleUser->getFirstName()) {
+                    $user->setFirstname($googleUser->getFirstName());
+                }
+            }
+
+            $this->em->persist($user);
+            $this->em->flush();
         }
 
         return $user;
-    }
-
-    public function supportsClass(string $class): bool
-    {
-        return User::class === $class;
-    }
-
-    public function refreshUser(UserInterface $user): UserInterface
-    {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException();
-        }
-
-        return $this->userRepository->find($user->getId());
-    }
-
-    public function loadUserByIdentifier(string $identifier): UserInterface
-    {
-        return $this->userRepository->findOneBy(['email' => $identifier]);
     }
 }

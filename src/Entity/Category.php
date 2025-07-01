@@ -25,7 +25,7 @@ class Category
     /**
      * @var Collection<int, Book>
      */
-    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'categorys')]
+    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'categories')]
     private Collection $books;
 
     /**

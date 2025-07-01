@@ -13,14 +13,14 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        $categorys = [];
+        $categories = [];
 
         foreach (['Novel', 'BD', 'Essay', 'Histoire', 'Science'] as $name) {
             $category = new Category();
             $category->setname($name);
             $category->setDescription($faker->sentence()); // ← c’est ce champ qui est obligatoire
             $manager->persist($category);
-            $categorys[] = $category;
+            $categories[] = $category;
         }
 
         // Exemple de création de books
@@ -33,7 +33,7 @@ class AppFixtures extends Fixture
             $book->setImageCouverture($faker->imageUrl(200, 300, 'books'));
 
             // Ajouter une catégorie aléatoire
-            $book->addCategory($faker->randomElement($categorys));
+            $book->addCategory($faker->randomElement($categories));
 
             $manager->persist($book);
         }

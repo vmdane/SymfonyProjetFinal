@@ -32,7 +32,7 @@ class BookForm extends AbstractType
                 'expanded'     => true,    // cases à cocher
                 'required'     => false,
             ])
-            ->add('categorys', EntityType::class, [
+            ->add('categories', EntityType::class, [
                 'class'        => Category::class,
                 'choice_label' => 'name',   // affiche le name de la catégorie
                 'multiple'     => true,
