@@ -76,12 +76,6 @@ class Book
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleBookId = null;
 
-    /**
-     * @var Collection<int, UserBook>
-     */
-    #[ORM\OneToMany(targetEntity: UserBook::class, mappedBy: 'book')]
-    private Collection $userBooks;
-
     public function __construct()
     {
         $this->authors = new ArrayCollection();
@@ -89,7 +83,6 @@ class Book
         $this->loans = new ArrayCollection();
         $this->notice = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-        $this->userBooks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,7 +177,7 @@ class Book
     /**
      * @return Collection<int, Category>
      */
-    public function getcategories(): Collection
+    public function getCategories(): Collection
     {
         return $this->categories;
     }
@@ -315,36 +308,6 @@ class Book
     public function setGoogleBookId(?string $googleBookId): static
     {
         $this->googleBookId = $googleBookId;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserBook>
-     */
-    public function getUserBooks(): Collection
-    {
-        return $this->userBooks;
-    }
-
-    public function addUserBook(UserBook $userBook): static
-    {
-        if (!$this->userBooks->contains($userBook)) {
-            $this->userBooks->add($userBook);
-            $userBook->setBook($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserBook(UserBook $userBook): static
-    {
-        if ($this->userBooks->removeElement($userBook)) {
-            // set the owning side to null (unless already changed)
-            if ($userBook->getBook() === $this) {
-                $userBook->setBook(null);
-            }
-        }
 
         return $this;
     }

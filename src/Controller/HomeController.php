@@ -12,7 +12,8 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(BookRepository $bookRepository): Response
     {
-        $books = $bookRepository->findAll();
+        // Récupérer 5 livres aléatoires (par exemple)
+        $books = $bookRepository->findRandomBooks(8);
 
         return $this->render('index.html.twig', [
             'books' => $books,

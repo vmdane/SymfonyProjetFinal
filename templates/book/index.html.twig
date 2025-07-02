@@ -116,7 +116,7 @@
                         {% endfor %}
                     </p>
                     <p class="card-text mb-3"><strong>Catégories:</strong>
-                        {% for cat in book.categories %}
+                        {% for cat in book.categorys %}
                             {{ cat.name }}{% if not loop.last %}, {% endif %}
                         {% else %}
                             Aucune

@@ -1,9 +1,10 @@
 <?php
+
 namespace App\DataFixtures;
 
-use App\Entity\Category;
 use App\Entity\Book;
-use Faker\Factory;
+use App\Entity\Author;
+use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -11,32 +12,55 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_FR');
+        // Création de quelques auteurs
+        $author1 = new Author();
+        $author1->setName('Victor Hugo');
+        $author1->setFirstname('Victor');
+        $author1->setDateNaissance(new \DateTime('1802-02-26'));
+        $author1->setBiographie('Écrivain français célèbre pour Les Misérables.');
+        $author1->setFullName('Victor Hugo');
+        $manager->persist($author1);
 
-        $categories = [];
+        $author2 = new Author();
+        $author2->setName('Verne');
+        $author2->setFirstname('Jules');
+        $author2->setDateNaissance(new \DateTime('1828-02-08'));
+        $author2->setBiographie('Auteur français de science-fiction, célèbre pour Voyage au centre de la Terre.');
+        $author2->setFullName('Jules Verne');
+        $manager->persist($author2);
 
-        foreach (['Novel', 'BD', 'Essay', 'Histoire', 'Science'] as $name) {
-            $category = new Category();
-            $category->setname($name);
-            $category->setDescription($faker->sentence()); // ← c’est ce champ qui est obligatoire
-            $manager->persist($category);
-            $categories[] = $category;
-        }
+        // Création de quelques catégories avec description (obligatoire)
+        $cat1 = new Category();
+        $cat1->setName('Roman');
+        $cat1->setDescription('Catégorie des romans classiques.');
+        $manager->persist($cat1);
 
-        // Exemple de création de books
-        for ($i = 0; $i < 50; $i++) {
-            $book = new Book();
-            $book->setTitre($faker->sentence(3));
-            $book->setDatePublication($faker->dateTimeBetween('-10 years', 'now'));
-            $book->setIsbn($faker->isbn13());
-            $book->setDisponible($faker->boolean());
-            $book->setImageCouverture($faker->imageUrl(200, 300, 'books'));
+        $cat2 = new Category();
+        $cat2->setName('Science-fiction');
+        $cat2->setDescription('Catégorie des œuvres de science-fiction.');
+        $manager->persist($cat2);
 
-            // Ajouter une catégorie aléatoire
-            $book->addCategory($faker->randomElement($categories));
+        // Création d’un livre disponible
+        $book1 = new Book();
+        $book1->setTitre('Les Misérables')
+              ->setDatePublication(new \DateTime('1862-01-01'))
+              ->setIsbn('978-1234567890')
+              ->setDisponible(true)
+              ->setImageCouverture('https://example.com/lesmiserables.jpg')
+              ->addAuthor($author1)
+              ->addCategory($cat1);
+        $manager->persist($book1);
 
-            $manager->persist($book);
-        }
+        // Création d’un livre indisponible
+        $book2 = new Book();
+        $book2->setTitre('Voyage au centre de la Terre')
+              ->setDatePublication(new \DateTime('1864-01-01'))
+              ->setIsbn('978-0987654321')
+              ->setDisponible(false)
+              ->setImageCouverture('https://example.com/voyage.jpg')
+              ->addAuthor($author2)
+              ->addCategory($cat2);
+        $manager->persist($book2);
 
         $manager->flush();
     }

@@ -17,35 +17,10 @@ final class LoanController extends AbstractController
     #[Route(name: 'app_loan_index', methods: ['GET'])]
     public function index(LoanRepository $loanRepository): Response
     {
-        $user = $this->getUser();
-        // Récupère tous les emprunts liés à l'utilisateur connecté
-        $loans = $loanRepository->findBy(['user' => $user]);
-
         return $this->render('loan/index.html.twig', [
-            'loans' => $loans,
+            'loans' => $loanRepository->findAll(),
         ]);
     }
-
-    #[Route('/{id}/return', name: 'app_loan_return', methods: ['POST'])]
-    public function markAsReturned(Loan $loan, EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->getUser();
-
-        // Sécurité : vérifier que l'emprunt appartient bien à l'utilisateur
-        if ($loan->getUser() !== $user) {
-            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet emprunt.');
-        }
-
-        // Mettre la date de retour à maintenant
-        $loan->setDateRetour(new \DateTimeImmutable());
-        // Optionnel : changer un statut s'il y en a
-        // $loan->setStatus('returned');
-
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_loan_index');
-    }
-
 
     #[Route('/new', name: 'app_loan_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

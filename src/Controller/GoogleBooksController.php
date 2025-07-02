@@ -7,8 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class GoogleBooksController extends AbstractController
 {
@@ -24,22 +22,4 @@ final class GoogleBooksController extends AbstractController
             'query' => $query,
         ]);
     }
-
-    #[Route('/books/library', name: 'google_books_library')]
-    public function library(SessionInterface $session, GoogleBooksService $booksService): Response
-    {
-        $accessToken = $session->get('google_access_token');
-
-        if (!$accessToken) {
-            return $this->redirectToRoute('connect_google');
-        }
-
-        $bookshelves = $booksService->getUserBookshelves($accessToken);
-
-        return $this->render('google_books/library.html.twig', [
-            'shelves' => $bookshelves['items'] ?? [],
-        ]);
-    }
-
-
 }
