@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma Bibliothèque Google{% endblock %}
+
+{% block body %}
+    <h1>Ma Bibliothèque Google</h1>
+
+    {% if shelves is empty %}
+        <p>Aucune étagère trouvée.</p>
+    {% else %}
+        <div class="bookshelves">
+            {% for shelf in shelves %}
+                <div class="shelf">
+                    <h2>{{ shelf.title }}</h2>
+
+                    {% if shelf.description is defined and shelf.description is not empty %}
+                        <p><strong>Description :</strong> {{ shelf.description }}</p>
+                    {% endif %}
+
+                    <p><strong>Nombre de livres :</strong> {{ shelf.volumeCount }}</p>
+
+                    {% if shelf.volumesLastUpdated is defined %}
+                        <p><small>Dernière mise à jour : {{ shelf.volumesLastUpdated|date('d/m/Y H:i') }}</small></p>
+                    {% endif %}
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

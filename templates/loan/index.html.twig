@@ -1,41 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Loan index{% endblock %}
+{% block title %}Mes emprunts{% endblock %}
 
 {% block body %}
-    <h1>Loan index</h1>
+    <h1>Mes emprunts</h1>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>DateDebut</th>
-                <th>DateFin</th>
-                <th>DateRetour</th>
-                <th>Statut</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Livre</th>
+            <th>Date d'emprunt</th>
+            <th>Date fin prévue</th>
+            <th>Date de retour</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for loan in loans %}
             <tr>
-                <td>{{ loan.id }}</td>
-                <td>{{ loan.dateDebut ? loan.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ loan.dateFin ? loan.dateFin|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ loan.dateRetour ? loan.dateRetour|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ loan.statut }}</td>
+                <td>{{ loan.book.titre }}</td>
+                <td>{{ loan.dateDebut ? loan.dateDebut|date('d/m/Y') : 'N/A' }}</td>
+                <td>{{ loan.dateFin ? loan.dateFin|date('d/m/Y') : 'N/A' }}</td>
+                <td>{{ loan.dateRetour ? loan.dateRetour|date('d/m/Y') : 'Pas encore rendu' }}</td>
                 <td>
-                    <a href="{{ path('app_loan_show', {'id': loan.id}) }}">show</a>
-                    <a href="{{ path('app_loan_edit', {'id': loan.id}) }}">edit</a>
+                    {% if not loan.dateRetour %}
+                        <form action="{{ path('app_loan_return', {id: loan.id}) }}" method="post" onsubmit="return confirm('Marquer ce livre comme rendu ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('return' ~ loan.id) }}">
+                            <button class="btn btn-success btn-sm" type="submit">Marquer rendu</button>
+                        </form>
+                    {% else %}
+                        <span class="text-success">Rendu</span>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="5">Aucun emprunt trouvé.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_loan_new') }}">Create new</a>
 {% endblock %}

@@ -32,6 +32,9 @@ class GoogleAuthenticator extends OAuth2Authenticator
         $client = $this->clientRegistry->getClient('google');
         $accessToken = $this->fetchAccessToken($client);
 
+        // Stocker le token d'accès en session pour pouvoir l'utiliser dans les contrôleurs
+        $request->getSession()->set('google_access_token', $accessToken->getToken());
+
         return new SelfValidatingPassport(
             new UserBadge($accessToken->getToken(), function () use ($client, $accessToken) {
                 $googleUser = $client->fetchUserFromToken($accessToken);
@@ -43,6 +46,7 @@ class GoogleAuthenticator extends OAuth2Authenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?RedirectResponse
     {
         $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
+
         if ($targetPath) {
             return new RedirectResponse($targetPath);
         }

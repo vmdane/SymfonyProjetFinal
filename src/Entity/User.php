@@ -68,11 +68,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
 
+    /**
+     * @var Collection<int, UserBook>
+     */
+    #[ORM\OneToMany(targetEntity: UserBook::class, mappedBy: 'user')]
+    private Collection $userBooks;
+
     public function __construct()
     {
         $this->loans = new ArrayCollection();
         $this->notice = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->userBooks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -273,6 +280,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGoogleId(string $googleId): static
     {
         $this->googleId = $googleId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserBook>
+     */
+    public function getUserBooks(): Collection
+    {
+        return $this->userBooks;
+    }
+
+    public function addUserBook(UserBook $userBook): static
+    {
+        if (!$this->userBooks->contains($userBook)) {
+            $this->userBooks->add($userBook);
+            $userBook->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserBook(UserBook $userBook): static
+    {
+        if ($this->userBooks->removeElement($userBook)) {
+            // set the owning side to null (unless already changed)
+            if ($userBook->getUser() === $this) {
+                $userBook->setUser(null);
+            }
+        }
 
         return $this;
     }
