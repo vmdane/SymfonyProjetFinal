@@ -21,7 +21,7 @@ class Loan
     #[ORM\Column]
     private ?\DateTime $dateFin = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTime $dateRetour = null;
 
     #[ORM\Column(length: 255)]
@@ -35,7 +35,6 @@ class Loan
 
     public function __construct()
     {
-        $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int

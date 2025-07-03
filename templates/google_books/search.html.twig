@@ -1,37 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello GoogleBooksController!{% endblock %}
+{% block title %}Recherche Google Books - Résultats{% endblock %}
 
 {% block body %}
+<div class="min-h-screen bg-gradient-to-r from-indigo-100 via-white to-indigo-100 py-12 px-6 flex flex-col items-center">
 
-
-    <h1>Résultats pour "{{ query }}"</h1>
-
-    <form method="get" action="{{ path('google_books_search') }}">
-        <input type="text" name="q" value="{{ query }}">
-        <button type="submit">Rechercher</button>
+  <header class="text-center mb-10 w-full max-w-5xl">
+    <h1 class="text-4xl font-bold text-indigo-900 mb-4">Résultats pour « <span class="italic text-indigo-600">{{ query }}</span> »</h1>
+    <form method="get" action="{{ path('google_books_search') }}" class="flex justify-center gap-4 mt-4">
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Rechercher un livre..."
+        class="w-full max-w-md px-4 py-2 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+      <button
+        type="submit"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-lg transition"
+      >
+        Rechercher
+      </button>
     </form>
+  </header>
 
-    <ul>
+  <main class="w-full max-w-6xl">
+    {% if books is not empty %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {% for book in books %}
-            <li style="margin-bottom: 2em;">
-                <strong>{{ attribute(book.volumeInfo, 'title')|default('Titre inconnu') }}</strong><br>
+          <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-4 flex flex-col">
+            <div class="h-48 bg-indigo-50 flex items-center justify-center overflow-hidden rounded-xl mb-4">
+              {% set imageLinks = attribute(book.volumeInfo, 'imageLinks')|default(null) %}
+              {% if imageLinks and imageLinks.thumbnail is defined %}
+                <img src="{{ imageLinks.thumbnail }}" alt="Couverture de {{ book.volumeInfo.title }}" class="object-contain max-h-full">
+              {% else %}
+                <span class="text-6xl text-indigo-300">📘</span>
+              {% endif %}
+            </div>
 
-                {% set authors = attribute(book.volumeInfo, 'authors')|default([]) %}
-                <em>{{ authors|join(', ') ?: 'Auteur inconnu' }}</em><br>
+            <h2 class="text-lg font-bold text-indigo-900 mb-2 line-clamp-2" title="{{ attribute(book.volumeInfo, 'title') }}">
+              {{ attribute(book.volumeInfo, 'title')|default('Titre inconnu') }}
+            </h2>
 
-                {% set imageLinks = attribute(book.volumeInfo, 'imageLinks')|default(null) %}
-                {% if imageLinks and imageLinks.thumbnail is defined %}
-                    <img src="{{ imageLinks.thumbnail }}" alt="Couverture de {{ book.volumeInfo.title }}" style="max-width: 120px; margin-top: 0.5em;"><br>
-                {% endif %}
+            {% set authors = attribute(book.volumeInfo, 'authors')|default([]) %}
+            <p class="text-sm text-indigo-700 mb-2">
+              <span class="font-semibold">Auteur{{ authors|length > 1 ? 's' : '' }} :</span>
+              {{ authors|join(', ') ?: 'Auteur inconnu' }}
+            </p>
 
-                <p>{{ attribute(book.volumeInfo, 'description')|default('Pas de description disponible.')|raw }}</p>
-            </li>
-        {% else %}
-            <li>Aucun livre trouvé.</li>
+            <p class="text-sm text-gray-700 mb-4 line-clamp-4">
+              {{ attribute(book.volumeInfo, 'description')|default('Pas de description disponible.')|raw }}
+            </p>
+
+            {% set infoLink = attribute(book.volumeInfo, 'infoLink')|default(null) %}
+            {% if infoLink %}
+              <a
+                href="{{ infoLink }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-auto inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-center font-semibold rounded-lg py-2 text-sm transition-colors"
+              >
+                Voir les détails
+              </a>
+            {% endif %}
+          </div>
         {% endfor %}
-    </ul>
+      </div>
+    {% else %}
+      <div class="text-center text-indigo-600 text-xl mt-10">Aucun livre trouvé.</div>
+    {% endif %}
+  </main>
 
-
-
+</div>
 {% endblock %}

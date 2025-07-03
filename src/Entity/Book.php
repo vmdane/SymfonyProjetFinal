@@ -35,7 +35,7 @@ class Book
     private ?string $isbn = null;
 
     #[ORM\Column]
-    private ?bool $disponible = null;
+    private ?bool $disponible = true;
 
     #[ORM\Column(length: 255)]
     private ?string $imageCouverture = null;
@@ -131,7 +131,7 @@ class Book
         return $this->disponible;
     }
 
-    public function setDisponible(bool $disponible): static
+    public function setDisponible(bool $disponible): self
     {
         $this->disponible = $disponible;
 

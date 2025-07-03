@@ -68,11 +68,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
 
+    /**
+     * @var Collection<int, Book>
+     */
+    #[ORM\ManyToMany(targetEntity: Book::class)]
+    #[ORM\JoinTable(name: 'user_favoris')]
+    private $favorite;
+
     public function __construct()
     {
         $this->loans = new ArrayCollection();
         $this->notice = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->favorite = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -273,6 +281,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGoogleId(string $googleId): static
     {
         $this->googleId = $googleId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Book>
+     */
+    public function getFavorite(): Collection
+    {
+        return $this->favorite;
+    }
+
+    public function addFavori(Book $book): self
+    {
+        if (!$this->favorite->contains($book)) {
+            $this->favorite[] = $book;
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Book $book): self
+    {
+        $this->favorite->removeElement($book);
 
         return $this;
     }

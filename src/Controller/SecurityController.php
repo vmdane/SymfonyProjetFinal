@@ -43,6 +43,11 @@ class SecurityController extends AbstractController
     #[Route('/connect/google/check', name: 'connect_google_check')]
     public function connectCheck()
     {
-        // Traité automatiquement par le système de sécurité
+    }
+
+    #[Route('/register', name: 'app_register')]
+    public function register(): Response
+    {
+        return $this->render('security/register.html.twig');
     }
 }

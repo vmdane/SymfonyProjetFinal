@@ -1,42 +1,140 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Book{% endblock %}
+{% block title %}Détails du livre - {{ book.titre }}{% endblock %}
 
 {% block body %}
-    <h1>Book</h1>
+<div class="min-h-screen bg-gradient-to-r from-indigo-100 via-white to-indigo-100 py-12 px-6 flex flex-col items-center">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ book.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ book.titre }}</td>
-            </tr>
-            <tr>
-                <th>DatePublication</th>
-                <td>{{ book.datePublication ? book.datePublication|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Isbn</th>
-                <td>{{ book.isbn }}</td>
-            </tr>
-            <tr>
-                <th>Disponible</th>
-                <td>{{ book.disponible ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>ImageCouverture</th>
-                <td>{{ book.imageCouverture }}</td>
-            </tr>
-        </tbody>
-    </table>
+  <div class="max-w-4xl w-full bg-white rounded-2xl shadow-lg p-8">
 
-    <a href="{{ path('app_book_index') }}">back to list</a>
+    {# Image couverture en haut, centrée #}
+    <div class="flex justify-center mb-8">
+      {% if book.imageCouverture is defined and book.imageCouverture %}
+        <img
+          src="{{ asset('images/' ~ book.imageCouverture) }}"
+          alt="Couverture du livre {{ book.titre }}"
+          class="max-h-96 rounded-lg shadow-lg object-cover"
+        >
+      {% else %}
+        <div class="w-64 h-96 bg-indigo-200 rounded-lg flex items-center justify-center text-indigo-400 text-8xl select-none">
+          📚
+        </div>
+      {% endif %}
+    </div>
 
-    <a href="{{ path('app_book_edit', {'id': book.id}) }}">edit</a>
+    <h1 class="text-4xl font-extrabold text-indigo-900 mb-6">{{ book.titre }}</h1>
 
+    <div class="mb-4">
+      <p class="text-lg text-indigo-700 font-semibold">
+        <span class="opacity-75">Auteur{{ book.authors|length > 1 ? 's' : '' }} :</span>
+        {% if book.authors|length > 0 %}
+          {% for author in book.authors %}
+            {{ author.name }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        {% else %}
+          <em>Non renseigné</em>
+        {% endif %}
+      </p>
+      <p class="text-lg text-indigo-600 font-semibold">
+        <span class="opacity-75">Catégorie{{ book.categories|length > 1 ? 's' : '' }} :</span>
+        {% if book.categories|length > 0 %}
+          {% for category in book.categories %}
+            {{ category.name }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        {% else %}
+          <em>Inconnue</em>
+        {% endif %}
+      </p>
+      <p class="text-lg text-indigo-600 font-semibold">
+        <span class="opacity-75">Donneur :</span>
+        {% if book.donneur is defined and book.donneur %}
+          {{ book.donneur.username }}
+        {% else %}
+          <em>Non renseigné</em>
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="mb-6">
+      <span class="inline-block px-4 py-2 rounded-full font-semibold
+                   {{ book.disponible ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900' }}">
+        {{ book.disponible ? 'Disponible' : 'Emprunté' }}
+      </span>
+    </div>
+
+    {% if book.disponible %}
+      <form method="post" action="{{ path('app_loan_emprunter', {'id': book.id}) }}" class="mb-6">
+        <input type="hidden" name="_token" value="{{ csrf_token('emprunter' ~ book.id) }}">
+        <button
+            type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg px-6 py-3 transition"
+        >
+            Emprunter ce livre
+        </button>
+    </form>
+
+    {% else %}
+      <p class="text-red-600 font-semibold mb-6">Ce livre est actuellement emprunté.</p>
+    {% endif %}
+
+    <section class="mb-6">
+      <h2 class="text-2xl font-bold text-indigo-900 mb-3">Emprunts passés</h2>
+      {% if book.emprunts is defined and book.emprunts|length > 0 %}
+        <ul class="list-disc list-inside text-indigo-700">
+          {% for emprunt in book.emprunts %}
+            <li>
+              {{ emprunt.utilisateur.username }} — du {{ emprunt.dateDebut|date('d/m/Y') }} au {{ emprunt.dateFin ? emprunt.dateFin|date('d/m/Y') : 'en cours' }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-indigo-600 italic">Aucun emprunt passé pour ce livre.</p>
+      {% endif %}
+    </section>
+
+   <section class="mb-6">
+  <h2 class="text-2xl font-bold text-indigo-900 mb-3">Avis des utilisateurs</h2>
+
+  {% if fakeReviews is defined and fakeReviews|length > 0 %}
+    <ul class="space-y-4">
+      {% for avis in fakeReviews %}
+        <li class="border border-indigo-200 rounded-lg p-4 bg-indigo-50">
+          <p class="font-semibold text-indigo-800">{{ avis.username }} dit :</p>
+          <p class="italic text-indigo-700">"{{ avis.commentaire }}"</p>
+          <p class="text-yellow-500">
+            {% for i in 1..5 %}
+              {% if i <= avis.note %}
+                ★
+              {% else %}
+                ☆
+              {% endif %}
+            {% endfor %}
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-indigo-600 italic">Aucun avis pour ce livre.</p>
+  {% endif %}
+</section>
+
+    <form method="post" action="{{ path('app_book_favoris', {'id': book.id}) }}">
+  <input type="hidden" name="_token" value="{{ csrf_token('favorite' ~ book.id) }}">
+  <button
+    type="submit"
+    class="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-lg px-6 py-3 transition"
+  >
+    Ajouter aux favorite
+  </button>
+</form>
+
+    <div class="mt-8">
+      <a href="{{ path('app_book_index') }}" class="text-indigo-600 hover:text-indigo-900 font-semibold">
+        &larr; Retour à l'accueil
+      </a>
+    </div>
+  </div>
+
+</div>
     {{ include('book/_delete_form.html.twig') }}
 {% endblock %}
