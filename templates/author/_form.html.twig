@@ -1,0 +1,14 @@
+{# templates/author/_form.html.twig #}
+{{ form_start(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.firstname) }}
+    {{ form_row(form.dateNaissance) }}
+    {{ form_row(form.biographie) }}
+
+    {# Ajoute ici la sélection des books #}
+    {{ form_row(form.books) }}
+
+    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+
+{{ form_end(form) }}

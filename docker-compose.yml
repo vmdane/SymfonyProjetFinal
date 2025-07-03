@@ -1,0 +1,34 @@
+services:
+
+    mysql:
+        image: mysql:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: bibliotheque
+            MYSQL_PASSWORD: root
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql_data:/var/lib/mysql:rw
+
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+            - "1025:1025"
+            - "8481:8025"
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            PMA_HOST: mysql
+            PMA_USER: root
+            PMA_PASSWORD: root
+        ports:
+            - "8981:80"
+        depends_on:
+            - mysql
+
+
+volumes:
+    pg_data:
+    mysql_data:

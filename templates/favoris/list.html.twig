@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes livres favorite{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-r from-indigo-100 via-white to-indigo-100 py-12 px-6 flex flex-col items-center">
+
+  <header class="max-w-6xl w-full mb-12 text-center px-4 sm:px-0">
+    <h1 class="text-6xl sm:text-7xl font-extrabold text-indigo-900 mb-4 drop-shadow-lg leading-tight">
+      Mes livres favorite
+    </h1>
+    <p class="text-xl text-indigo-700 max-w-3xl mx-auto mb-8">
+      Retrouvez ici la liste de vos livres préférés.
+    </p>
+  </header>
+
+  <main class="max-w-6xl w-full grid gap-8 sm:gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-center px-4 sm:px-0">
+
+    {% if favorite|length > 0 %}
+
+      {% for book in favorite %}
+        <article class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col overflow-hidden group max-w-xs w-full mx-auto">
+
+          <div class="relative h-48 overflow-hidden rounded-t-2xl bg-indigo-50">
+            {% if book.imageCouverture %}
+              <img
+                src="{{ asset('images/' ~ book.imageCouverture) }}"
+                alt="Couverture du livre {{ book.titre }}"
+                class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300"
+              >
+            {% else %}
+              <div class="flex items-center justify-center h-full text-indigo-400 text-7xl font-bold select-none">
+                📚
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="p-4 flex flex-col flex-grow overflow-visible">
+            <h2
+              class="text-lg sm:text-xl font-extrabold text-indigo-900 mb-1"
+              title="{{ book.titre }}"
+            >
+              {{ book.titre }}
+            </h2>
+
+            <p class="text-xs sm:text-sm text-indigo-700 mb-3 font-semibold" title="Auteurs">
+              <span class="opacity-75">Auteur{{ book.authors|length > 1 ? 's' : '' }} :</span>
+              {% if book.authors|length > 0 %}
+                {{ book.authors|map(a => a.name)|join(', ') }}
+              {% else %}
+                <em>Non renseigné</em>
+              {% endif %}
+            </p>
+
+            <form method="post" action="{{ path('app_favoris_remove', {'id': book.id}) }}" class="mt-auto">
+              <input type="hidden" name="_token" value="{{ csrf_token('remove_favori' ~ book.id) }}">
+              <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold w-full transition">
+                Retirer des favoris
+              </button>
+            </form>
+          </div>
+
+        </article>
+      {% endfor %}
+
+    {% else %}
+      <p class="col-span-full text-center text-indigo-500 text-lg mt-16">
+        Vous n'avez pas encore ajouté de livres en favoris.
+      </p>
+    {% endif %}
+
+  </main>
+
+</div>
+{% endblock %}
