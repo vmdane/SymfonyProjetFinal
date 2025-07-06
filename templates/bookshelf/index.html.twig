@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bookshelf index{% endblock %}
+
+{% block body %}
+    <h1>Bookshelf index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bookshelf in bookshelves %}
+            <tr>
+                <td>{{ bookshelf.id }}</td>
+                <td>{{ bookshelf.name }}</td>
+                <td>
+                    <a href="{{ path('app_bookshelf_show', {'id': bookshelf.id}) }}">show</a>
+                    <a href="{{ path('app_bookshelf_edit', {'id': bookshelf.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bookshelf_new') }}">Create new</a>
+{% endblock %}

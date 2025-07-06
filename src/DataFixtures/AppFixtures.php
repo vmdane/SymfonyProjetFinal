@@ -14,19 +14,15 @@ class AppFixtures extends Fixture
     {
         // Création de quelques auteurs
         $author1 = new Author();
-        $author1->setName('Victor Hugo');
-        $author1->setFirstname('Victor');
-        $author1->setDateNaissance(new \DateTime('1802-02-26'));
-        $author1->setBiographie('Écrivain français célèbre pour Les Misérables.');
-        $author1->setFullName('Victor Hugo');
+        $author1->setFullname('Victor Hugo');
+        $author1->setBirthdate(new \DateTime('1802-02-26'));
+        $author1->setBiography('Écrivain français célèbre pour Les Misérables.');
         $manager->persist($author1);
 
         $author2 = new Author();
-        $author2->setName('Verne');
-        $author2->setFirstname('Jules');
-        $author2->setDateNaissance(new \DateTime('1828-02-08'));
-        $author2->setBiographie('Auteur français de science-fiction, célèbre pour Voyage au centre de la Terre.');
-        $author2->setFullName('Jules Verne');
+        $author2->setFullname('Jules Verne');
+        $author2->setBirthdate(new \DateTime('1828-02-08'));
+        $author2->setBiography('Auteur français de science-fiction, célèbre pour Voyage au centre de la Terre.');
         $manager->persist($author2);
 
         // Création de quelques catégories avec description (obligatoire)
@@ -42,22 +38,22 @@ class AppFixtures extends Fixture
 
         // Création d’un livre disponible
         $book1 = new Book();
-        $book1->setTitre('Les Misérables')
-              ->setDatePublication(new \DateTime('1862-01-01'))
+        $book1->setTitle('Les Misérables')
+              ->setPublicationDate(new \DateTime('1862-01-01'))
               ->setIsbn('978-1234567890')
-              ->setDisponible(true)
-              ->setImageCouverture('https://example.com/lesmiserables.jpg')
+              ->setAvailable(true)
+              ->setCoverImage('https://example.com/lesmiserables.jpg')
               ->addAuthor($author1)
               ->addCategory($cat1);
         $manager->persist($book1);
 
         // Création d’un livre indisponible
         $book2 = new Book();
-        $book2->setTitre('Voyage au centre de la Terre')
-              ->setDatePublication(new \DateTime('1864-01-01'))
+        $book2->setTitle('Voyage au centre de la Terre')
+              ->setPublicationDate(new \DateTime('1864-01-01'))
               ->setIsbn('978-0987654321')
-              ->setDisponible(false)
-              ->setImageCouverture('https://example.com/voyage.jpg')
+              ->setAvailable(false)
+              ->setCoverImage('https://example.com/voyage.jpg')
               ->addAuthor($author2)
               ->addCategory($cat2);
         $manager->persist($book2);

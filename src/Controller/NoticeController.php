@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Notice;
-use App\Form\NoticeForm;
-use App\Repository\NoticeRepository;
+use App\Entity\Review;
+use App\Form\ReviewForm;
+use App\Repository\ReviewRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class NoticeController extends AbstractController
 {
     #[Route(name: 'app_notice_index', methods: ['GET'])]
-    public function index(NoticeRepository $noticeRepository): Response
+    public function index(ReviewRepository $noticeRepository): Response
     {
         return $this->render('notice/index.html.twig', [
             'notice' => $noticeRepository->findAll(),
@@ -25,8 +25,8 @@ final class NoticeController extends AbstractController
     #[Route('/new', name: 'app_notice_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $avi = new Notice();
-        $form = $this->createForm(NoticeForm::class, $avi);
+        $avi = new Review();
+        $form = $this->createForm(ReviewForm::class, $avi);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -37,23 +37,23 @@ final class NoticeController extends AbstractController
         }
 
         return $this->render('notice/new.html.twig', [
-            'avi' => $avi,
+            'review' => $avi,
             'form' => $form,
         ]);
     }
 
     #[Route('/{id}', name: 'app_notice_show', methods: ['GET'])]
-    public function show(Notice $avi): Response
+    public function show(Review $avi): Response
     {
         return $this->render('notice/show.html.twig', [
-            'avi' => $avi,
+            'review' => $avi,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_notice_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Notice $avi, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Review $avi, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(NoticeForm::class, $avi);
+        $form = $this->createForm(ReviewForm::class, $avi);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -63,13 +63,13 @@ final class NoticeController extends AbstractController
         }
 
         return $this->render('notice/edit.html.twig', [
-            'avi' => $avi,
+            'review' => $avi,
             'form' => $form,
         ]);
     }
 
     #[Route('/{id}', name: 'app_notice_delete', methods: ['POST'])]
-    public function delete(Request $request, Notice $avi, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Review $avi, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$avi->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($avi);

@@ -8,66 +8,47 @@
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
     <!-- HEADER -->
-    <header class="bg-blue-900 px-6 py-4 shadow-md">
-        <nav>
-            <ul class="flex gap-6 flex-wrap">
-                <li>
-                    <a href="{{ path('app_home') }}"
-                       class="text-gray-100 font-semibold px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition">
-                        Accueil
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('app_book_index') }}"
-                       class="text-gray-100 font-semibold px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition">
-                        Books
-                    </a>
-                </li>
+    <header class="bg-blue-900 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo / Accueil -->
+                <div class="flex-shrink-0">
+                    <a href="{{ path('app_home') }}" class="text-white text-2xl font-bold">📚 Biblio</a>
+                </div>
 
-                {# Liens visibles uniquement si connecté #}
-                {% if app.user %}
-                    <li>
-                        <a href="{{ path('ma_bibliotheque') }}"
-                           class="text-gray-100 font-semibold px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition">
-                            Ma Bibliothèque
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('app_favoris') }}"
-                           class="text-gray-100 font-semibold px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition">
-                            favoris
-                        </a>
-                    </li>
-                {% endif %}
+                <!-- Menu principal -->
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="{{ path('app_home') }}" class="text-gray-100 hover:text-white font-medium transition">Accueil</a>
+                    <a href="{{ path('app_book_index') }}" class="text-gray-100 hover:text-white font-medium transition">Catalogue</a>
 
-                {# Connexion / Déconnexion #}
-                <li>
-                    <a href="{{ path('app_author_index') }}"
-                       class="text-gray-100 font-semibold px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition">
-                        Authors
-                    </a>
-                </li>
-                {% if app.user %}
-                    <li>
-                        <a href="{{ path('app_logout') }}"
-                           class="text-gray-100 font-semibold px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition">
-                            Déconnexion
-                        </a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="{{ path('app_login') }}"
-                           class="text-gray-100 font-semibold px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition">
-                            Connexion
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
+                    {% if app.user %}
+                        <a href="{{ path('app_user_profile', {'id': app.user.id}) }}" class="text-gray-100 hover:text-white font-medium transition">Mon profil</a>
+                        <a href="{{ path('ma_bibliotheque') }}" class="text-gray-100 hover:text-white font-medium transition">Mes bibliothèques</a>
+                        <a href="{{ path('app_favorite') }}" class="text-gray-100 hover:text-white font-medium transition">Favoris</a>
+                        <a href="{{ path('app_loan_index') }}" class="text-gray-100 hover:text-white font-medium transition">Prêts</a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('admin_dashboard') }}" class="text-yellow-300 hover:text-white font-medium transition">Admin</a>
+                    {% endif %}
+                </nav>
+
+                <!-- Auth / Actions -->
+                <div class="flex items-center space-x-4">
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}" class="text-red-300 hover:text-white font-medium transition">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="text-gray-100 hover:text-white font-medium transition">Connexion</a>
+                        <a href="{{ path('app_register') }}" class="text-white bg-blue-700 px-3 py-1 rounded hover:bg-blue-600 transition text-sm">Inscription</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </header>
 
+
     <!-- MAIN -->
-    <main class="flex-grow max-w-4xl w-full mx-auto my-10 p-8 bg-white rounded-xl shadow-lg">
+    <main class="flex-grow w-full mx-auto bg-white rounded-xl shadow-lg">
         {% block body %}
         {# Le contenu principal des pages ira ici #}
         {% endblock %}

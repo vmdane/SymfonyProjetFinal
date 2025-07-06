@@ -15,10 +15,10 @@ class LoanForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('dateDebut')
-            ->add('dateFin')
-            ->add('dateRetour')
-            ->add('statut')
+            ->add('startDate')
+            ->add('endDate')
+            ->add('returnDate')
+            ->add('status')
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',

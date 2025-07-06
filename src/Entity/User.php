@@ -8,14 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-#[ORM\InheritanceType("JOINED")]
-#[ORM\DiscriminatorColumn(name: "type", type: "string")]
-#[ORM\DiscriminatorMap([
-    "user" => User::class,
-    "drive" => \App\Entity\Drive::class,
-    "giver" => \App\Entity\Giver::class,
-    "admin" => \App\Entity\Admin::class
-])]
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -44,20 +36,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTime $createAt = null;
 
-    #[ORM\Column]
-    private ?bool $isVerified = null;
+
+
 
     /**
-     * @var Collection<int, Loan>
+     * @var Collection<int, Review>
      */
-    #[ORM\OneToMany(targetEntity: Loan::class, mappedBy: 'user')]
-    private Collection $loans;
-
-    /**
-     * @var Collection<int, Notice>
-     */
-    #[ORM\OneToMany(targetEntity: Notice::class, mappedBy: 'user')]
-    private Collection $notice;
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'user')]
+    private Collection $reviews;
 
     /**
      * @var Collection<int, Notification>
@@ -72,15 +58,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Book>
      */
     #[ORM\ManyToMany(targetEntity: Book::class)]
-    #[ORM\JoinTable(name: 'user_favoris')]
+    #[ORM\JoinTable(name: 'user_favorite')]
     private $favorite;
+
+    /**
+     * @var Collection<int, Loan>
+     */
+    #[ORM\OneToMany(targetEntity: Loan::class, mappedBy: 'borrower')]
+    private Collection $borrowed;
+
+    /**
+     * @var Collection<int, Loan>
+     */
+    #[ORM\OneToMany(targetEntity: Loan::class, mappedBy: 'lender')]
+    private Collection $lent;
+
+    /**
+     * @var Collection<int, Bookshelf>
+     */
+    #[ORM\OneToMany(targetEntity: Bookshelf::class, mappedBy: 'user')]
+    private Collection $bookshelves;
 
     public function __construct()
     {
-        $this->loans = new ArrayCollection();
-        $this->notice = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->favorite = new ArrayCollection();
+        $this->borrowed = new ArrayCollection();
+        $this->lent = new ArrayCollection();
+        $this->bookshelves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,72 +166,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isVerified(): ?bool
-    {
-        return $this->isVerified;
-    }
 
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
 
-        return $this;
-    }
+
+
 
     /**
-     * @return Collection<int, Loan>
+     * @return Collection<int, Review>
      */
-    public function getLoans(): Collection
+    public function getReviews(): Collection
     {
-        return $this->loans;
+        return $this->reviews;
     }
 
-    public function addLoan(Loan $loan): static
+    public function addReview(Review $review): static
     {
-        if (!$this->loans->contains($loan)) {
-            $this->loans->add($loan);
-            $loan->setUser($this);
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeLoan(Loan $loan): static
+    public function removeReview(Review $review): static
     {
-        if ($this->loans->removeElement($loan)) {
+        if ($this->reviews->removeElement($review)) {
             // set the owning side to null (unless already changed)
-            if ($loan->getUser() === $this) {
-                $loan->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Notice>
-     */
-    public function getNotice(): Collection
-    {
-        return $this->notice;
-    }
-
-    public function addAvi(Notice $avi): static
-    {
-        if (!$this->notice->contains($avi)) {
-            $this->notice->add($avi);
-            $avi->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAvi(Notice $avi): static
-    {
-        if ($this->notice->removeElement($avi)) {
-            // set the owning side to null (unless already changed)
-            if ($avi->getUser() === $this) {
-                $avi->setUser(null);
+            if ($review->getUser() === $this) {
+                $review->setUser(null);
             }
         }
 
@@ -293,7 +262,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->favorite;
     }
 
-    public function addFavori(Book $book): self
+    public function addFavorite(Book $book): self
     {
         if (!$this->favorite->contains($book)) {
             $this->favorite[] = $book;
@@ -302,9 +271,99 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeFavori(Book $book): self
+    public function removeFavorite(Book $book): self
     {
         $this->favorite->removeElement($book);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Loan>
+     */
+    public function getBorrowed(): Collection
+    {
+        return $this->borrowed;
+    }
+
+    public function addBorrowed(Loan $borrowed): static
+    {
+        if (!$this->borrowed->contains($borrowed)) {
+            $this->borrowed->add($borrowed);
+            $borrowed->setBorrower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBorrowed(Loan $borrowed): static
+    {
+        if ($this->borrowed->removeElement($borrowed)) {
+            // set the owning side to null (unless already changed)
+            if ($borrowed->getBorrower() === $this) {
+                $borrowed->setBorrower(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Loan>
+     */
+    public function getLent(): Collection
+    {
+        return $this->lent;
+    }
+
+    public function addLent(Loan $lent): static
+    {
+        if (!$this->lent->contains($lent)) {
+            $this->lent->add($lent);
+            $lent->setLender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLent(Loan $lent): static
+    {
+        if ($this->lent->removeElement($lent)) {
+            // set the owning side to null (unless already changed)
+            if ($lent->getLender() === $this) {
+                $lent->setLender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bookshelf>
+     */
+    public function getLibraries(): Collection
+    {
+        return $this->bookshelves;
+    }
+
+    public function addLibrary(Bookshelf $library): static
+    {
+        if (!$this->bookshelves->contains($library)) {
+            $this->bookshelves->add($library);
+            $library->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLibrary(Bookshelf $library): static
+    {
+        if ($this->bookshelves->removeElement($library)) {
+            // set the owning side to null (unless already changed)
+            if ($library->getUser() === $this) {
+                $library->setUser(null);
+            }
+        }
 
         return $this;
     }

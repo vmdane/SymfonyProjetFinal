@@ -1,34 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Notice{% endblock %}
+{% block title %}Review{% endblock %}
 
 {% block body %}
-    <h1>Notice</h1>
+    <h1>Review</h1>
 
     <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ avi.id }}</td>
+                <td>{{ review.id }}</td>
             </tr>
             <tr>
-                <th>Note</th>
-                <td>{{ avi.note }}</td>
+                <th>Rate</th>
+                <td>{{ review.rate }}</td>
             </tr>
             <tr>
-                <th>Commentaire</th>
-                <td>{{ avi.commentaire }}</td>
+                <th>Review</th>
+                <td>{{ review.review }}</td>
             </tr>
             <tr>
                 <th>Date</th>
-                <td>{{ avi.date ? avi.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ review.date ? review.date|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_notice_index') }}">back to list</a>
 
-    <a href="{{ path('app_notice_edit', {'id': avi.id}) }}">edit</a>
+    <a href="{{ path('app_notice_edit', {'id': review.id}) }}">edit</a>
 
     {{ include('notice/_delete_form.html.twig') }}
 {% endblock %}

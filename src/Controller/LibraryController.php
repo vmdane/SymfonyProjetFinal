@@ -20,14 +20,14 @@ class LibraryController extends AbstractController
 
         $currentLoans = $loanRepository->findBy([
             'user' => $user,
-            'dateRetour' => null,
+            'returnDate' => null,
         ]);
 
         $pastLoans = $loanRepository->findBy([
             'user' => $user,
-        ], ['dateRetour' => 'DESC']);
+        ], ['returnDate' => 'DESC']);
 
-        $pastLoans = array_filter($pastLoans, fn($loan) => $loan->getDateRetour() !== null);
+        $pastLoans = array_filter($pastLoans, fn($loan) => $loan->getReturnDate() !== null);
 
         return $this->render('library/my_library.html.twig', [
             'currentLoans' => $currentLoans,

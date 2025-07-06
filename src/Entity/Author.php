@@ -16,17 +16,11 @@ class Author
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $firstname = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $dateNaissance = null;
+    private ?\DateTime $birthdate = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $biographie = null;
+    private ?string $biography = null;
 
     /**
      * @var Collection<int, Book>
@@ -35,10 +29,10 @@ class Author
     private Collection $books;
 
     /**
-     * @var Collection<int, Notice>
+     * @var Collection<int, Review>
      */
-    #[ORM\OneToMany(targetEntity: Notice::class, mappedBy: 'author')]
-    private Collection $notice;
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author')]
+    private Collection $reviews;
 
     #[ORM\Column(length: 255)]
     private ?string $fullName = null;
@@ -46,7 +40,7 @@ class Author
     public function __construct()
     {
         $this->books = new ArrayCollection();
-        $this->notice = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -54,50 +48,27 @@ class Author
         return $this->id;
     }
 
-    public function getName(): ?string
+
+    public function getBirthdate(): ?\DateTime
     {
-        return $this->name;
+        return $this->birthdate;
     }
 
-    public function setName(string $name): static
+    public function setBirthdate(\DateTime $birthdate): static
     {
-        $this->name = $name;
+        $this->birthdate = $birthdate;
 
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getBiography(): ?string
     {
-        return $this->firstname;
+        return $this->biography;
     }
 
-    public function setFirstname(string $firstname): static
+    public function setBiography(string $biography): static
     {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    public function getDateNaissance(): ?\DateTime
-    {
-        return $this->dateNaissance;
-    }
-
-    public function setDateNaissance(\DateTime $dateNaissance): static
-    {
-        $this->dateNaissance = $dateNaissance;
-
-        return $this;
-    }
-
-    public function getBiographie(): ?string
-    {
-        return $this->biographie;
-    }
-
-    public function setBiographie(string $biographie): static
-    {
-        $this->biographie = $biographie;
+        $this->biography = $biography;
 
         return $this;
     }
@@ -130,29 +101,29 @@ class Author
     }
 
     /**
-     * @return Collection<int, Notice>
+     * @return Collection<int, Review>
      */
-    public function getNotice(): Collection
+    public function getReviews(): Collection
     {
-        return $this->notice;
+        return $this->reviews;
     }
 
-    public function addAvi(Notice $avi): static
+    public function addReview(Review $review): static
     {
-        if (!$this->notice->contains($avi)) {
-            $this->notice->add($avi);
-            $avi->setAuthor($this);
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setAuthor($this);
         }
 
         return $this;
     }
 
-    public function removeAvi(Notice $avi): static
+    public function removeReview(Review $review): static
     {
-        if ($this->notice->removeElement($avi)) {
+        if ($this->reviews->removeElement($review)) {
             // set the owning side to null (unless already changed)
-            if ($avi->getAuthor() === $this) {
-                $avi->setAuthor(null);
+            if ($review->getAuthor() === $this) {
+                $review->setAuthor(null);
             }
         }
 

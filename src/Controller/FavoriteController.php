@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FavoriteController extends AbstractController
 {
-    #[Route('/favorite', name: 'app_favoris')]
+    #[Route('/favorite', name: 'app_favorite')]
     public function index(): Response
     {
         $user = $this->getUser();
@@ -26,7 +26,7 @@ class FavoriteController extends AbstractController
         ]);
     }
 
-    #[Route('/favorite', name: 'app_favoris_list')]
+    #[Route('/favorite', name: 'app_favorite_list')]
     public function list(): Response
     {
         $user = $this->getUser();
@@ -42,7 +42,7 @@ class FavoriteController extends AbstractController
         ]);
     }
 
-    #[Route('/favorite/add/{id}', name: 'app_favoris_add', methods: ['POST'])]
+    #[Route('/favorite/add/{id}', name: 'app_favorite_add', methods: ['POST'])]
     public function add(Book $book, EntityManagerInterface $em, Request $request): Response
     {
         $user = $this->getUser();
@@ -55,7 +55,7 @@ class FavoriteController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide');
         }
 
-        $user->addFavori($book);
+        $user->addFavorite($book);
         $em->flush();
 
         $this->addFlash('success', 'Livre ajouté aux favorite !');
@@ -63,7 +63,7 @@ class FavoriteController extends AbstractController
         return $this->redirectToRoute('app_book_index');
     }
 
-    #[Route('/favorite/remove/{id}', name: 'app_favoris_remove', methods: ['POST'])]
+    #[Route('/favorite/remove/{id}', name: 'app_favorite_remove', methods: ['POST'])]
     public function remove(Book $book, EntityManagerInterface $em, Request $request): Response
     {
         $user = $this->getUser();
@@ -76,11 +76,11 @@ class FavoriteController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide');
         }
 
-        $user->removeFavori($book);
+        $user->removeFavorite($book);
         $em->flush();
 
         $this->addFlash('success', 'Livre retiré des favorite !');
 
-        return $this->redirectToRoute('app_favoris_list');
+        return $this->redirectToRoute('app_favorite_list');
     }
 }

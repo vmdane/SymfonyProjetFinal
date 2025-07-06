@@ -60,9 +60,9 @@ final class LoanController extends AbstractController
         $loan = new Loan();
         $loan->setUser($user);
         $loan->setBook($book);
-        $loan->setDateDebut(new \DateTime());
-        $loan->setDateFin((new \DateTime())->modify('+14 days'));
-        $loan->setStatut('en cours');
+        $loan->setStartDate(new \DateTime());
+        $loan->setEndDate((new \DateTime())->modify('+14 days'));
+        $loan->setStatus('en cours');
 
         $entityManager->persist($loan);
         $entityManager->flush();

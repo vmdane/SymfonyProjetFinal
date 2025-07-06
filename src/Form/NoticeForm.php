@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Author;
-use App\Entity\Notice;
+use App\Entity\Review;
 use App\Entity\Book;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -11,13 +11,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class NoticeForm extends AbstractType
+class ReviewForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('note')
-            ->add('commentaire')
+            ->add('rate')
+            ->add('review')
             ->add('date')
             ->add('book', EntityType::class, [
                 'class' => Book::class,
@@ -37,7 +37,7 @@ class NoticeForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Notice::class,
+            'data_class' => Review::class,
         ]);
     }
 }

@@ -1,30 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Notice index{% endblock %}
+{% block title %}Review index{% endblock %}
 
 {% block body %}
-    <h1>Notice index</h1>
+    <h1>Review index</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Note</th>
-                <th>Commentaire</th>
+                <th>Rate</th>
+                <th>Review</th>
                 <th>Date</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for avi in notice %}
+        {% for review in notice %}
             <tr>
-                <td>{{ avi.id }}</td>
-                <td>{{ avi.note }}</td>
-                <td>{{ avi.commentaire }}</td>
-                <td>{{ avi.date ? avi.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ review.id }}</td>
+                <td>{{ review.rate }}</td>
+                <td>{{ review.review }}</td>
+                <td>{{ review.date ? review.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_notice_show', {'id': avi.id}) }}">show</a>
-                    <a href="{{ path('app_notice_edit', {'id': avi.id}) }}">edit</a>
+                    <a href="{{ path('app_notice_show', {'id': review.id}) }}">show</a>
+                    <a href="{{ path('app_notice_edit', {'id': review.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

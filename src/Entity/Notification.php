@@ -15,13 +15,13 @@ class Notification
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $contenu = null;
+    private ?string $content = null;
 
     #[ORM\Column]
-    private ?\DateTime $dateEnvoi = null;
+    private ?\DateTime $sendDate = null;
 
     #[ORM\Column]
-    private ?bool $lu = null;
+    private ?bool $isRead = null;
 
     #[ORM\Column(length: 255)]
     private ?string $type = null;
@@ -40,38 +40,38 @@ class Notification
         return $this->id;
     }
 
-    public function getContenu(): ?string
+    public function getContent(): ?string
     {
-        return $this->contenu;
+        return $this->content;
     }
 
-    public function setContenu(string $contenu): static
+    public function setContent(string $content): static
     {
-        $this->contenu = $contenu;
+        $this->content = $content;
 
         return $this;
     }
 
-    public function getDateEnvoi(): ?\DateTime
+    public function getSendDate(): ?\DateTime
     {
-        return $this->dateEnvoi;
+        return $this->sendDate;
     }
 
-    public function setDateEnvoi(\DateTime $dateEnvoi): static
+    public function setSendDate(\DateTime $sendDate): static
     {
-        $this->dateEnvoi = $dateEnvoi;
+        $this->sendDate = $sendDate;
 
         return $this;
     }
 
-    public function isLu(): ?bool
+    public function getIsRead(): ?bool
     {
-        return $this->lu;
+        return $this->isRead;
     }
 
-    public function setLu(bool $lu): static
+    public function setIsRead(bool $isRead): static
     {
-        $this->lu = $lu;
+        $this->isRead = $isRead;
 
         return $this;
     }

@@ -32,6 +32,33 @@ class BookRepository extends ServiceEntityRepository
 
     return array_slice($books, 0, $limit);
 }
+    public function findBooksByCategoryAndGenre(?int $categoryId = null, ?int $genreId = null): array
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->leftJoin('b.categories', 'c')
+            ->leftJoin('b.categories', 'g', 'WITH', 'g INSTANCE OF App\Entity\Genre')
+            ->addSelect('c', 'g');
+
+        if ($categoryId && $genreId) {
+            // Filtrer par les deux → AND
+            $qb->andWhere('c.id = :categoryId')
+                ->andWhere('g.id = :genreId')
+                ->setParameter('categoryId', $categoryId)
+                ->setParameter('genreId', $genreId);
+        } elseif ($categoryId) {
+            // Seulement catégorie
+            $qb->andWhere('c.id = :categoryId')
+                ->setParameter('categoryId', $categoryId);
+        } elseif ($genreId) {
+            // Seulement genre
+            $qb->andWhere('g.id = :genreId')
+                ->setParameter('genreId', $genreId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+
 
 
 //    /**

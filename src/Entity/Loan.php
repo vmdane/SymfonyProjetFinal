@@ -15,23 +15,28 @@ class Loan
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?\DateTime $dateDebut = null;
-
-    #[ORM\Column]
-    private ?\DateTime $dateFin = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $startDate = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTime $dateRetour = null;
+    private ?\DateTime $endDate = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $returnDate = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $statut = null;
+    private ?string $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'loans')]
-    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'loans')]
     private ?Book $book = null;
+
+    #[ORM\ManyToOne(inversedBy: 'borrowed')]
+    private ?User $borrower = null;
+
+    #[ORM\ManyToOne(inversedBy: 'lent')]
+    private ?User $lender = null;
+
 
     public function __construct()
     {
@@ -42,62 +47,50 @@ class Loan
         return $this->id;
     }
 
-    public function getDateDebut(): ?\DateTime
+    public function getStartDate(): ?\DateTime
     {
-        return $this->dateDebut;
+        return $this->startDate;
     }
 
-    public function setDateDebut(\DateTime $dateDebut): static
+    public function setStartDate(\DateTime $startDate): static
     {
-        $this->dateDebut = $dateDebut;
+        $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getDateFin(): ?\DateTime
+    public function getEndDate(): ?\DateTime
     {
-        return $this->dateFin;
+        return $this->endDate;
     }
 
-    public function setDateFin(\DateTime $dateFin): static
+    public function setEndDate(\DateTime $endDate): static
     {
-        $this->dateFin = $dateFin;
+        $this->endDate = $endDate;
 
         return $this;
     }
 
-    public function getDateRetour(): ?\DateTime
+    public function getReturnDate(): ?\DateTime
     {
-        return $this->dateRetour;
+        return $this->returnDate;
     }
 
-    public function setDateRetour(\DateTime $dateRetour): static
+    public function setReturnDate(\DateTime $returnDate): static
     {
-        $this->dateRetour = $dateRetour;
+        $this->returnDate = $returnDate;
 
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getStatus(): ?string
     {
-        return $this->statut;
+        return $this->status;
     }
 
-    public function setStatut(string $statut): static
+    public function setStatus(string $status): static
     {
-        $this->statut = $statut;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
+        $this->status = $status;
 
         return $this;
     }
@@ -110,6 +103,29 @@ class Loan
     public function setBook(?Book $book): static
     {
         $this->book = $book;
+        return $this;
+    }
+
+    public function getBorrower(): ?User
+    {
+        return $this->borrower;
+    }
+
+    public function setBorrower(?User $borrower): static
+    {
+        $this->borrower = $borrower;
+
+        return $this;
+    }
+
+    public function getLender(): ?User
+    {
+        return $this->lender;
+    }
+
+    public function setLender(?User $lender): static
+    {
+        $this->lender = $lender;
 
         return $this;
     }

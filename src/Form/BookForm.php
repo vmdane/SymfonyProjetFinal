@@ -16,13 +16,13 @@ class BookForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre')
-            ->add('datePublication', DateType::class, [
+            ->add('title')
+            ->add('publicationDate', DateType::class, [
                 'widget' => 'single_text',
             ])
             ->add('isbn')
-            ->add('disponible')
-            ->add('imageCouverture')
+            ->add('available')
+            ->add('coverImage')
             ->add('authors', EntityType::class, [
                 'class'        => Author::class,
                 'choice_label' => function(Author $author) {

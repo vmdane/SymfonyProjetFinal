@@ -25,17 +25,17 @@ class BookFixtures extends Fixture
 
         for ($i = 1; $i <= 50; $i++) {
             $book = new Book();
-            $book->setTitre($faker->sentence(3));
-            $book->setDatePublication($faker->dateTimeBetween('-30 years', 'now'));
+            $book->setTitle($faker->sentence(3));
+            $book->setPublicationDate($faker->dateTimeBetween('-30 years', 'now'));
             $book->setIsbn($faker->isbn13());
-            $book->setDisponible($faker->boolean(80));
+            $book->setAvailable($faker->boolean(80));
 
             // Choisir une image aléatoire parmi celles trouvées
             if (count($imageFiles) > 0) {
                 $randomImage = $faker->randomElement($imageFiles);
-                $book->setImageCouverture($randomImage);
+                $book->setCoverImage($randomImage);
             } else {
-                $book->setImageCouverture('default.jpg'); // fallback si dossier vide
+                $book->setCoverImage('default.jpg'); // fallback si dossier vide
             }
 
             if (count($authors) > 0) {

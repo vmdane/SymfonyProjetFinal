@@ -1,7 +1,7 @@
 {# Ce template étend le fichier de base 'base.html.twig' #}
 {% extends 'base.html.twig' %}
 
-{# Bloc qui définit le titre de la page #}
+{# Bloc qui définit le title de la page #}
 {% block title %}Author index{% endblock %}
 
 {# Bloc principal du contenu de la page #}
@@ -12,8 +12,7 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>name</th>
-                <th>firstname</th>
+                <th>fullname</th>
                 <th>DateNaissance</th>
                 <th>Biographie</th>
                 <th>actions</th>
@@ -24,11 +23,10 @@
         {% for author in authors %}
             <tr>
                 <td>{{ author.id }}</td>
-                <td>{{ author.name }}</td>
-                <td>{{ author.firstname }}</td>
+                <td>{{ author.fullname }}</td>
                 {# Formatage de la date de naissance si elle existe #}
-                <td>{{ author.dateNaissance ? author.dateNaissance|date('Y-m-d') : '' }}</td>
-                <td>{{ author.biographie }}</td>
+                <td>{{ author.birthdate ? author.birthdate|date('Y-m-d') : '' }}</td>
+                <td>{{ author.biography }}</td>
                 <td>
                     {# Liens pour voir ou éditer l'author #}
                     <a href="{{ path('app_author_show', {'id': author.id}) }}">show</a>

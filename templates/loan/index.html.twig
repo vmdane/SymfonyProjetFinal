@@ -9,10 +9,10 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>DateDebut</th>
-                <th>DateFin</th>
-                <th>DateRetour</th>
-                <th>Statut</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>ReturnDate</th>
+                <th>Status</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -20,10 +20,10 @@
         {% for loan in loans %}
             <tr>
                 <td>{{ loan.id }}</td>
-                <td>{{ loan.dateDebut ? loan.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ loan.dateFin ? loan.dateFin|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ loan.dateRetour ? loan.dateRetour|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ loan.statut }}</td>
+                <td>{{ loan.startDate ? loan.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ loan.endDate ? loan.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ loan.returnDate ? loan.returnDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ loan.status }}</td>
                 <td>
                     <a href="{{ path('app_loan_show', {'id': loan.id}) }}">show</a>
                     <a href="{{ path('app_loan_edit', {'id': loan.id}) }}">edit</a>

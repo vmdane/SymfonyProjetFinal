@@ -12,20 +12,20 @@
                 <td>{{ loan.id }}</td>
             </tr>
             <tr>
-                <th>DateDebut</th>
-                <td>{{ loan.dateDebut ? loan.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                <th>StartDate</th>
+                <td>{{ loan.startDate ? loan.startDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>DateFin</th>
-                <td>{{ loan.dateFin ? loan.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                <th>EndDate</th>
+                <td>{{ loan.endDate ? loan.endDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>DateRetour</th>
-                <td>{{ loan.dateRetour ? loan.dateRetour|date('Y-m-d H:i:s') : '' }}</td>
+                <th>ReturnDate</th>
+                <td>{{ loan.returnDate ? loan.returnDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Statut</th>
-                <td>{{ loan.statut }}</td>
+                <th>Status</th>
+                <td>{{ loan.status }}</td>
             </tr>
         </tbody>
     </table>

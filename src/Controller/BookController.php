@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Form\BookForm;
 use App\Repository\BookRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\GenreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +19,19 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 final class BookController extends AbstractController
 {
     #[Route(name: 'app_book_index', methods: ['GET'])]
-    public function index(BookRepository $bookRepository): Response
+    public function index(Request $request, BookRepository $bookRepository, CategoryRepository $categoryRepository, GenreRepository $genreRepository): Response
     {
+        $categoryId = $request->query->get('category');
+        $genreId = $request->query->get('genre');
+
+        $books = $bookRepository->findBooksByCategoryAndGenre($categoryId, $genreId);
+        $categories = $categoryRepository->findAll();
+        $genres = $genreRepository->findAll();
+
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findAll(),
+            'books' => $books,
+            'categories' => $categories,
+            'genres' => $genres,
         ]);
     }
 
@@ -50,23 +61,23 @@ final class BookController extends AbstractController
         $fakeReviews = [
             [
                 'username' => 'Alice',
-                'commentaire' => 'A fascinating book, highly recommend it!',
-                'note' => 5,
+                'review' => 'A fascinating book, highly recommend it!',
+                'rate' => 5,
             ],
             [
                 'username' => 'Bob',
-                'commentaire' => 'Not bad, but a bit lengthy.',
-                'note' => 3,
+                'review' => 'Not bad, but a bit lengthy.',
+                'rate' => 3,
             ],
             [
                 'username' => 'Charlie',
-                'commentaire' => 'An enjoyable and enriching read.',
-                'note' => 4,
+                'review' => 'An enjoyable and enriching read.',
+                'rate' => 4,
             ],
             [
                 'username' => 'Denise',
-                'commentaire' => 'Didn’t quite get into it, too complex for me.',
-                'note' => 2,
+                'review' => 'Didn’t quite get into it, too complex for me.',
+                'rate' => 2,
             ],
         ];
 
@@ -114,8 +125,8 @@ final class BookController extends AbstractController
             throw $this->createAccessDeniedException('Invalid CSRF token');
         }
 
-        if ($book->isDisponible()) {
-            $book->setDisponible(false);
+        if ($book->isAvailable()) {
+            $book->setAvailable(false);
             $em->flush();
             $this->addFlash('success', 'Livre emprunté avec succès !');
         } else {
@@ -125,7 +136,7 @@ final class BookController extends AbstractController
         return $this->redirectToRoute('app_book_index'); // ou autre route où tu veux revenir
     }
 
-    #[Route('/{id}/favorite', name: 'app_book_favoris', methods: ['POST'])]
+    #[Route('/{id}/favorite', name: 'app_book_favorite', methods: ['POST'])]
     public function favorite(Book $book): RedirectResponse
     {
         $user = $this->getUser();
@@ -145,7 +156,7 @@ final class BookController extends AbstractController
         return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
     }
 
-    #[Route('/book/{id}/favorite', name: 'app_book_favoris', methods: ['POST'])]
+    #[Route('/book/{id}/favorite', name: 'app_book_favorite', methods: ['POST'])]
     public function addToFavorite(int $id, Request $request, EntityManagerInterface $em): RedirectResponse
     {
         $user = $this->getUser();

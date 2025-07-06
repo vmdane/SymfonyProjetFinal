@@ -18,13 +18,13 @@ class AuthorForm extends AbstractType
         $builder
             ->add('name')
             ->add('firstname')
-            ->add('dateNaissance', DateType::class, [
+            ->add('birthdate', DateType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('biographie', TextareaType::class)
+            ->add('biography', TextareaType::class)
             ->add('books', EntityType::class, [
                 'class' => Book::class,
-                'choice_label' => 'titre', // plus lisible
+                'choice_label' => 'title', // plus lisible
                 'multiple' => true,
                 'expanded' => true,        // cases à cocher
                 'required' => false,

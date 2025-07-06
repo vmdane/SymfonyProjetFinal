@@ -9,14 +9,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
-#[ORM\InheritanceType("JOINED")]
-#[ORM\DiscriminatorColumn(name: "type", type: "string")]
-#[ORM\DiscriminatorMap([
-    "book" => Book::class,
-    "novel" => Novel::class,
-    "bd" => BD::class,
-    "essay" => Essay::class
-])]
 
 class Book
 {
@@ -26,19 +18,19 @@ class Book
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $titre = null;
+    private ?string $title = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $datePublication = null;
+    private ?\DateTime $publicationDate = null;
 
     #[ORM\Column(length: 255)]
     private ?string $isbn = null;
 
     #[ORM\Column]
-    private ?bool $disponible = true;
+    private ?bool $available = true;
 
     #[ORM\Column(length: 255)]
-    private ?string $imageCouverture = null;
+    private ?string $coverImage = null;
 
     /**
      * @var Collection<int, Author>
@@ -59,10 +51,10 @@ class Book
     private Collection $loans;
 
     /**
-     * @var Collection<int, Notice>
+     * @var Collection<int, Review>
      */
-    #[ORM\OneToMany(targetEntity: Notice::class, mappedBy: 'book')]
-    private Collection $notice;
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'book')]
+    private Collection $reviews;
 
     /**
      * @var Collection<int, Notification>
@@ -76,13 +68,33 @@ class Book
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleBookId = null;
 
+    /**
+     * @var Collection<int, Bookshelf>
+     */
+    #[ORM\ManyToMany(targetEntity: Bookshelf::class, mappedBy: 'books')]
+    private Collection $bookshelves;
+
+    /**
+     * @var Collection<int, Language>
+     */
+    #[ORM\ManyToMany(targetEntity: Language::class, inversedBy: 'books')]
+    private Collection $languages;
+
+    /**
+     * @var Collection<int, Genre>
+     */
+
+
     public function __construct()
     {
         $this->authors = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->loans = new ArrayCollection();
-        $this->notice = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->bookshelves = new ArrayCollection();
+        $this->languages = new ArrayCollection();
+        $this->genres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,26 +102,26 @@ class Book
         return $this->id;
     }
 
-    public function getTitre(): ?string
+    public function getTitle(): ?string
     {
-        return $this->titre;
+        return $this->title;
     }
 
-    public function setTitre(string $titre): static
+    public function setTitle(string $title): static
     {
-        $this->titre = $titre;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getDatePublication(): ?\DateTime
+    public function getPublicationDate(): ?\DateTime
     {
-        return $this->datePublication;
+        return $this->publicationDate;
     }
 
-    public function setDatePublication(\DateTime $datePublication): static
+    public function setPublicationDate(\DateTime $publicationDate): static
     {
-        $this->datePublication = $datePublication;
+        $this->publicationDate = $publicationDate;
 
         return $this;
     }
@@ -126,26 +138,26 @@ class Book
         return $this;
     }
 
-    public function isDisponible(): ?bool
+    public function isAvailable(): ?bool
     {
-        return $this->disponible;
+        return $this->available;
     }
 
-    public function setDisponible(bool $disponible): self
+    public function setAvailable(bool $available): self
     {
-        $this->disponible = $disponible;
+        $this->available = $available;
 
         return $this;
     }
 
-    public function getImageCouverture(): ?string
+    public function getCoverImage(): ?string
     {
-        return $this->imageCouverture;
+        return $this->coverImage;
     }
 
-    public function setImageCouverture(string $imageCouverture): self
+    public function setCoverImage(string $coverImage): self
     {
-        $this->imageCouverture = $imageCouverture;
+        $this->coverImage = $coverImage;
 
         return $this;
     }
@@ -229,33 +241,11 @@ class Book
     }
 
     /**
-     * @return Collection<int, Notice>
+     * @return Collection<int, Review>
      */
-    public function getNotice(): Collection
+    public function getReviews(): Collection
     {
-        return $this->notice;
-    }
-
-    public function addAvi(Notice $avi): static
-    {
-        if (!$this->notice->contains($avi)) {
-            $this->notice->add($avi);
-            $avi->setBook($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAvi(Notice $avi): static
-    {
-        if ($this->notice->removeElement($avi)) {
-            // set the owning side to null (unless already changed)
-            if ($avi->getBook() === $this) {
-                $avi->setBook(null);
-            }
-        }
-
-        return $this;
+        return $this->reviews;
     }
 
     /**
@@ -308,6 +298,81 @@ class Book
     public function setGoogleBookId(?string $googleBookId): static
     {
         $this->googleBookId = $googleBookId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bookshelf>
+     */
+    public function getLibraries(): Collection
+    {
+        return $this->bookshelves;
+    }
+
+    public function addLibrary(Bookshelf $library): static
+    {
+        if (!$this->bookshelves->contains($library)) {
+            $this->bookshelves->add($library);
+            $library->addBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLibrary(Bookshelf $library): static
+    {
+        if ($this->bookshelves->removeElement($library)) {
+            $library->removeBook($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->languages;
+    }
+
+    public function addLanguage(Language $language): static
+    {
+        if (!$this->languages->contains($language)) {
+            $this->languages->add($language);
+        }
+
+        return $this;
+    }
+
+    public function removeLanguage(Language $language): static
+    {
+        $this->languages->removeElement($language);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Genre>
+     */
+    public function getGenres(): Collection
+    {
+        return $this->genres;
+    }
+
+    public function addGenre(Genre $genre): static
+    {
+        if (!$this->genres->contains($genre)) {
+            $this->genres->add($genre);
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre): static
+    {
+        $this->genres->removeElement($genre);
 
         return $this;
     }
