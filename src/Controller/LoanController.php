@@ -58,7 +58,7 @@ final class LoanController extends AbstractController
 
         // Créer un nouvel emprunt
         $loan = new Loan();
-        $loan->setUser($user);
+        $loan->setBorrower($user);
         $loan->setBook($book);
         $loan->setStartDate(new \DateTime());
         $loan->setEndDate((new \DateTime())->modify('+14 days'));
@@ -69,8 +69,32 @@ final class LoanController extends AbstractController
 
         $this->addFlash('success', 'Livre emprunté avec succès !');
 
-        return $this->redirectToRoute('app_library');
+        return $this->redirectToRoute('ma_bibliotheque');
     }
+
+    #[Route('/rendre/{id}', name: 'app_loan_return', methods: ['POST'])]
+    public function rendre(Loan $loan, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user || $loan->getBorrower() !== $user) {
+            throw $this->createAccessDeniedException('Accès non autorisé.');
+        }
+
+        if (!$this->isCsrfTokenValid('rendre' . $loan->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        $loan->setReturnDate(new \DateTime());
+        $loan->setStatus('retourné');
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Livre rendu avec succès.');
+
+        return $this->redirectToRoute('ma_bibliotheque');
+    }
+
 
 
     #[Route('/{id}', name: 'app_loan_show', methods: ['GET'])]

@@ -14,12 +14,39 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/notification')]
 final class NotificationController extends AbstractController
 {
-    #[Route(name: 'app_notification_index', methods: ['GET'])]
+    #[Route('/', name: 'app_notifications')]
     public function index(NotificationRepository $notificationRepository): Response
     {
+        $user = $this->getUser();
+        $notifications = $notificationRepository->findBy(['user' => $user], ['sendDate' => 'DESC']);
+
         return $this->render('notification/index.html.twig', [
-            'notifications' => $notificationRepository->findAll(),
+            'notifications' => $notifications,
         ]);
+    }
+
+    #[Route('/{id}/mark-read', name: 'notification_mark_read')]
+    public function markAsRead(Notification $notification, EntityManagerInterface $em): RedirectResponse
+    {
+        $notification->setIsRead(true);
+        $em->flush();
+
+        return $this->redirectToRoute('app_notifications');
+    }
+
+    #[Route('/mark-all-read', name: 'notification_mark_all_read')]
+    public function markAllAsRead(NotificationRepository $notificationRepository, EntityManagerInterface $em): RedirectResponse
+    {
+        $user = $this->getUser();
+        $notifications = $notificationRepository->findBy(['user' => $user, 'isRead' => false]);
+
+        foreach ($notifications as $notification) {
+            $notification->setIsRead(true);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('app_notifications');
     }
 
     #[Route('/new', name: 'app_notification_new', methods: ['GET', 'POST'])]

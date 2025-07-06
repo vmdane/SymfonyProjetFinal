@@ -4,7 +4,4 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-ma_bibliotheque:
-    path: /ma-bibliotheque
-    controller: App\Controller\BibliothequeController::index
 

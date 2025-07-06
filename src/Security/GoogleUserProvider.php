@@ -40,7 +40,6 @@ class GoogleUserProvider
 
                 // Init autres champs si tu veux éviter erreurs (optionnel)
                 $user->setCreateAt(new \DateTime());
-                $user->setIsVerified(true);
 
                 // Optionnel : récupérer nom et prénom depuis Google si dispo
                 if ($googleUser->getName()) {

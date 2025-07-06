@@ -3,25 +3,26 @@
 {% block title %}Ma Bibliothèque{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-100 py-12 px-6">
-    <div class="max-w-6xl mx-auto">
-        <h1 class="text-4xl font-bold text-indigo-800 mb-6 text-center">Ma Bibliothèque</h1>
+    <div class="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-100 py-12 px-6">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-6 text-center">Ma Bibliothèque</h1>
 
-        <!-- Emprunts en cours -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-semibold text-indigo-700 mb-4">📚 Emprunts en cours</h2>
+            <!-- Emprunts en cours -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-4">📚 Emprunts en cours</h2>
 
-            {% if currentLoans|length > 0 %}
-                <table class="min-w-full bg-white shadow rounded-lg">
-                    <thead>
+                {% if currentLoans|length > 0 %}
+                    <table class="min-w-full bg-white shadow rounded-lg">
+                        <thead>
                         <tr class="bg-indigo-700 text-white">
                             <th class="py-3 px-6 text-left">Titre du livre</th>
                             <th class="py-3 px-6 text-left">Date de début</th>
                             <th class="py-3 px-6 text-left">Date de retour prévue</th>
                             <th class="py-3 px-6 text-left">Status</th>
+                            <th class="py-3 px-6 text-left">Action</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         {% for loan in currentLoans %}
                             <tr class="border-b border-gray-200 hover:bg-indigo-50">
                                 <td class="py-3 px-6">
@@ -32,41 +33,74 @@
                                 <td class="py-3 px-6">{{ loan.startDate|date('d/m/Y') }}</td>
                                 <td class="py-3 px-6">{{ loan.returnDate|date('d/m/Y') }}</td>
                                 <td class="py-3 px-6 text-green-600 font-semibold">En cours</td>
+                                <td class="py-3 px-6">
+                                    <form action="{{ path('app_loan_return', {id: loan.id}) }}" method="post" onsubmit="return confirm('Confirmer le retour du livre ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('rendre' ~ loan.id) }}">
+                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded">
+                                            Rendre
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p class="text-indigo-500 italic">Aucun emprunt en cours.</p>
-            {% endif %}
-        </section>
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-indigo-500 italic">Aucun emprunt en cours.</p>
+                {% endif %}
+            </section>
 
-        <!-- Emprunts passés -->
-        <section>
-            <h2 class="text-2xl font-semibold text-indigo-700 mb-4">📖 Emprunts passés</h2>
+            <!-- Emprunts passés -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-4">📖 Emprunts passés</h2>
 
-            {% if pastLoans|length > 0 %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {% for loan in pastLoans %}
-                        <article class="bg-white rounded-xl shadow-md p-4 flex flex-col">
-                            <h3 class="text-lg font-bold text-indigo-900 mb-1">{{ loan.book.title }}</h3>
-                            <p class="text-sm text-indigo-600">Date de début : {{ loan.startDate|date('d/m/Y') }}</p>
-                            <p class="text-sm text-indigo-600">Date de retour : {{ loan.returnDate|date('d/m/Y') }}</p>
-                            <p class="text-sm text-green-700 font-semibold mt-1">✔️ Livre retourné</p>
+                {% if pastLoans|length > 0 %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {% for loan in pastLoans %}
+                            <article class="bg-white rounded-xl shadow-md p-4 flex flex-col">
+                                <h3 class="text-lg font-bold text-indigo-900 mb-1">{{ loan.book.title }}</h3>
+                                <p class="text-sm text-indigo-600">Date de début : {{ loan.startDate|date('d/m/Y') }}</p>
+                                <p class="text-sm text-indigo-600">Date de retour : {{ loan.returnDate|date('d/m/Y') }}</p>
+                                <p class="text-sm text-green-700 font-semibold mt-1">✔️ Livre retourné</p>
 
-                            <div class="mt-auto">
-                                <a href="{{ path('app_book_show', {'id': loan.book.id}) }}"
-                                   class="inline-block mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 px-4 rounded transition">
-                                    Voir les détails
-                                </a>
+                                <div class="mt-auto">
+                                    <a href="{{ path('app_book_show', {'id': loan.book.id}) }}"
+                                       class="inline-block mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 px-4 rounded transition">
+                                        Voir les détails
+                                    </a>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-indigo-500 italic">Aucun emprunt passé.</p>
+                {% endif %}
+            </section>
+
+            <!-- Mes étagères -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-4">🗄️ Mes étagères</h2>
+
+                {% if bookshelves|length > 0 %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {% for shelf in bookshelves %}
+                            <div class="bg-white rounded-xl shadow-md p-4 flex flex-col">
+                                <h3 class="text-lg font-bold text-indigo-900 mb-2">{{ shelf.name }}</h3>
+                                <p class="text-sm text-indigo-600 mb-2">📚 Livres : {{ shelf.books|length }}</p>
+
+                                <div class="mt-auto">
+                                    <a href="{{ path('app_bookshelf_show', {'id': shelf.id}) }}"
+                                       class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 px-4 rounded transition">
+                                        Voir l'étagère
+                                    </a>
+                                </div>
                             </div>
-                        </article>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="text-indigo-500 italic">Aucun emprunt passé.</p>
-            {% endif %}
-        </section>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-indigo-500 italic">Aucune étagère trouvée.</p>
+                {% endif %}
+            </section>
+        </div>
     </div>
-</div>
 {% endblock %}

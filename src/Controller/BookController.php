@@ -24,6 +24,9 @@ final class BookController extends AbstractController
         $categoryId = $request->query->get('category');
         $genreId = $request->query->get('genre');
 
+        $categoryId = is_numeric($categoryId) ? (int) $categoryId : null;
+        $genreId = is_numeric($genreId) ? (int) $genreId : null;
+
         $books = $bookRepository->findBooksByCategoryAndGenre($categoryId, $genreId);
         $categories = $categoryRepository->findAll();
         $genres = $genreRepository->findAll();

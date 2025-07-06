@@ -46,7 +46,7 @@
             <p class="text-xs sm:text-sm text-indigo-700 mb-3 font-semibold" title="Auteurs">
               <span class="opacity-75">Auteur{{ book.authors|length > 1 ? 's' : '' }} :</span>
               {% if book.authors|length > 0 %}
-                {{ book.authors|map(a => a.name)|join(', ') }}
+                {{ book.authors|map(a => a.fullname)|join(', ') }}
               {% else %}
                 <em>Non renseigné</em>
               {% endif %}

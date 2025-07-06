@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LibraryController extends AbstractController
 {
-    #[Route('/ma-bibliotheque', name: 'app_library')]
+    #[Route('/', name: 'app_l')]
     public function index(LoanRepository $loanRepository): Response
     {
         $user = $this->getUser();

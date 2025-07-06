@@ -25,7 +25,6 @@
                         <a href="{{ path('app_user_profile', {'id': app.user.id}) }}" class="text-gray-100 hover:text-white font-medium transition">Mon profil</a>
                         <a href="{{ path('ma_bibliotheque') }}" class="text-gray-100 hover:text-white font-medium transition">Mes bibliothèques</a>
                         <a href="{{ path('app_favorite') }}" class="text-gray-100 hover:text-white font-medium transition">Favoris</a>
-                        <a href="{{ path('app_loan_index') }}" class="text-gray-100 hover:text-white font-medium transition">Prêts</a>
                     {% endif %}
 
                     {% if is_granted('ROLE_ADMIN') %}

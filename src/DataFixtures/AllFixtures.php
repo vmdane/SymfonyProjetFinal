@@ -5,7 +5,6 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use App\Entity\Book;
 use App\Entity\Loan;
-use App\Entity\UserBook;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -31,7 +30,7 @@ class AllFixtures extends Fixture
             $user->setEmail($faker->unique()->safeEmail);
             $user->setRoles(['ROLE_USER']);
             $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
-            $user->setPassword($hashedPassword); // à remplacer par un hash en vrai
+            $user->setPassword($hashedPassword);
             $user->setName($faker->lastName);
             $user->setFirstname($faker->firstName);
             $user->setCreateAt($faker->dateTimeBetween('-1 years', 'now'));
@@ -60,10 +59,18 @@ class AllFixtures extends Fixture
         for ($i = 0; $i < 20; $i++) {
             $loan = new Loan();
 
-            $user = $faker->randomElement($users);
+            $borrower = $faker->randomElement($users);
             $book = $faker->randomElement($books);
 
             $loan->setBook($book);
+
+            // Ici, on suppose que le lender est un user différent du borrower
+            do {
+                $lender = $faker->randomElement($users);
+            } while ($lender === $borrower);
+
+            $loan->setBorrower($borrower);
+            $loan->setLender($lender);
 
             $startDate = $faker->dateTimeBetween('-60 days', '-10 days');
             $loan->setStartDate($startDate);
@@ -72,18 +79,14 @@ class AllFixtures extends Fixture
             $loan->setEndDate($endDate);
 
             if ($faker->boolean(60)) {
-                // Prêt rendu : returnDate entre startDate et maintenant
                 $returnDate = $faker->dateTimeBetween($startDate, 'now');
             } else {
-                // Prêt non rendu : on met une fausse date dans le futur (par exemple demain)
                 $returnDate = (new \DateTime())->modify('+1 day');
             }
 
             $loan->setReturnDate($returnDate);
 
             $loan->setStatus($faker->boolean(60) ? 'Returned' : 'On loan');
-
-
 
             $manager->persist($loan);
         }

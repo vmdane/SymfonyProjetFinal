@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Bookshelf;
 use App\Form\BookshelfForm;
 use App\Repository\BookshelfRepository;
+use App\Repository\LoanRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,37 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/bookshelf')]
 final class BookshelfController extends AbstractController
 {
+    #[Route('/ma-bibliotheque', name: 'ma_bibliotheque', methods: ['GET'])]
+    public function libraryOverview(
+        LoanRepository $loanRepository,
+        BookshelfRepository $bookshelfRepository
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté');
+        }
+
+        $currentLoans = $loanRepository->findBy([
+            'borrower' => $user,
+            'returnDate' => null,
+        ]);
+
+        $pastLoans = $loanRepository->findBy([
+            'borrower' => $user,
+        ], ['returnDate' => 'DESC']);
+
+        $pastLoans = array_filter($pastLoans, fn($loan) => $loan->getReturnDate() !== null);
+
+        $userBookshelves = $bookshelfRepository->findBy(['user' => $user]);
+
+        return $this->render('library/my_library.html.twig', [
+            'currentLoans' => $currentLoans,
+            'pastLoans' => $pastLoans,
+            'bookshelves' => $userBookshelves,
+        ]);
+    }
+
     #[Route(name: 'app_bookshelf_index', methods: ['GET'])]
     public function index(BookshelfRepository $bookshelfRepository): Response
     {
