@@ -1,6 +1,12 @@
-# :books: Bibliothèque- Symfony 
+# 📚 Bibliothèque - Symfony
 
-## :wrench: Prérequis
+## 🌍 Site en ligne
+
+👉 [https://bibliotheque.karen-gueppois.fr](https://bibliotheque.karen-gueppois.fr)
+
+---
+
+## 🔧 Prérequis
 
 - PHP >= 8.3
 - Composer
@@ -9,7 +15,7 @@
 
 ---
 
-## :rocket: Installation locale
+## 🚀 Installation locale
 
 ```bash
 git clone https://github.com/vmdane/SymfonyProjetFinal
@@ -30,4 +36,5 @@ php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load --purge-with-truncate
 
 # Lancer le serveur
-symfony server:start  
+symfony server:start
+```
