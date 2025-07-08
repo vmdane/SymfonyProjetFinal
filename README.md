@@ -30,4 +30,8 @@ php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load --purge-with-truncate
 
 # Lancer le serveur
-symfony server:start  
+symfony server:start
+
+#Access
+User : test@example.com
+password : password123
