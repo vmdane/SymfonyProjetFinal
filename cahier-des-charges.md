@@ -58,27 +58,27 @@ CI/CD : GitHub Actions (tests, lint, PHPStan)
 
 7. Entités (10)
 
-User
+● User
 
-Book
+● Book
 
-Author
+● Author
 
-BookShelf
+● BookShelf
 
-Category
+● Category
 
-Genre
+● Genre
 
-Language
+● Language
 
-Loan
+● Loan
 
-Notification
+● Notification
 
-Review
+● Review
 
-Héritage
+● Héritage
 
 En prévision : héritage potentiel via discrimination entre Admin, User, Giver.
 
@@ -86,29 +86,29 @@ Relations
 
 ✅ 2 ManyToMany :
 
-User <-> Book (Favoris)
+● User <-> Book (Favoris)
 
-Book <-> Author
+● Book <-> Author
 
 ✅ 8+ OneToMany :
 
-User -> Book (Donneur)
+● User -> Book (Donneur)
 
-User -> Loan
+● User -> Loan
 
-User -> Review
+● User -> Review
 
-User -> Notification
+● User -> Notification
 
-Book -> Review
+● Book -> Review
 
-Book -> Loan
+● Book -> Loan
 
-Category -> Book
+● Category -> Book
 
-Genre -> Book
+● Genre -> Book
 
-Language -> Book
+● Language -> Book
 
 
 8. Sécurité
