@@ -27,13 +27,10 @@ Dans un contexte où les pratiques écoresponsables gagnent du terrain, ce proje
 
 📘 Ajout de livres via Google Books API.
 
-🔔 Notifications pour les actions clés.
-
 ⭐ Avis utilisateurs (note/commentaire après emprunt).
 
 🔐 Système d’authentification sécurisé (ROLE_USER actif).
 
-🧪 Tests unitaires et fonctionnels.
 
 🌐 Site déployé en ligne :
 👉 https://bibliotheque.karen-gueppois.fr
