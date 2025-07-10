@@ -41,19 +41,27 @@ Dans un contexte où les pratiques écoresponsables gagnent du terrain, ce proje
 5. Fonctionnalités à venir
 
 📧 Envoi d’emails (ex : rappels d’emprunt, notifications importantes).
+
 🛠️ Espace Admin : gestion des utilisateurs, contenus, catégories.
+
 🙋‍♂️ Rôle Giver : interface dédiée pour les donneurs de livres (prêts, retours).
-📦 Gestion des points de rendez-vous physiques (optionnel).
+
 💬 Chat entre utilisateurs (optionnel).
+
 📊 Statistiques de lectures et prêts.
 
 6. Architecture technique
 
 Backend : Symfony 7
+
 Frontend : Twig + Tailwind CSS
+
 BDD : MySQL / Doctrine ORM
+
 API externe : Google Books
+
 Déploiement : Production sur hébergement distant
+
 CI/CD : GitHub Actions (tests, lint, PHPStan)
 
 7. Entités (10)
