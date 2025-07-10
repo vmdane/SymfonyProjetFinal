@@ -18,14 +18,23 @@ Dans un contexte où les pratiques écoresponsables gagnent du terrain, ce proje
 4. Fonctionnalités principales (actuellement développées)
 
 🔍 Page d’accueil : liste des livres disponibles avec recherche par titre/auteur.
+
 📖 Page de détail d’un livre : description, disponibilité, bouton d’emprunt, historique des emprunts, avis.
+
 👤 Profil utilisateur : livres donnés, favoris, emprunts en cours/passés, avis
+
 🗂️ Page des catégories : consultation des livres par catégorie.
+
 📘 Ajout de livres via Google Books API.
+
 🔔 Notifications pour les actions clés.
+
 ⭐ Avis utilisateurs (note/commentaire après emprunt).
+
 🔐 Système d’authentification sécurisé (ROLE_USER actif).
+
 🧪 Tests unitaires et fonctionnels.
+
 🌐 Site déployé en ligne :
 👉 https://bibliotheque.karen-gueppois.fr
 
