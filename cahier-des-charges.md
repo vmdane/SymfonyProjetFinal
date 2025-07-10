@@ -59,37 +59,66 @@ CI/CD : GitHub Actions (tests, lint, PHPStan)
 7. Entités (10)
 
 User
+
 Book
+
 Author
+
 BookShelf
+
 Category
+
 Genre
+
 Language
+
 Loan
+
 Notification
+
 Review
+
 Héritage
+
 En prévision : héritage potentiel via discrimination entre Admin, User, Giver.
+
 Relations
+
 ✅ 2 ManyToMany :
+
 User <-> Book (Favoris)
+
 Book <-> Author
+
 ✅ 8+ OneToMany :
+
 User -> Book (Donneur)
+
 User -> Loan
+
 User -> Review
+
 User -> Notification
+
 Book -> Review
+
 Book -> Loan
+
 Category -> Book
+
 Genre -> Book
+
 Language -> Book
+
 
 8. Sécurité
 
 🔐 Authentification complète avec encodage des mots de passe.
+
 🔒 Sécurisation des routes.
+
 🧩 En cours : voter personnalisé.
+
 👥 Rôles prévus : ROLE_USER (actif), ROLE_ADMIN, ROLE_GIVER (en cours de mise en place).
 
 9. Tests
